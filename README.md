@@ -25,3 +25,14 @@ python -m unittest discover -s tests -v
 ```
 
 完整初始化、交接 JSON、审核、定时运行方式和边界见 [运行手册](docs/knowledge-workflow.md)。`run` 只执行一次同步并准备提炼任务；不会自动调用模型、发布或访问手机。四角色可交给已授权工具执行，实际连接须通过认证后的端到端任务验证。
+
+
+## 免费与付费算力协同
+
+[低成本协同方案](docs/low-cost-compute.md) 汇总官方免费层/营销额度边界、已有产品权益、任务分工与三轮试验。只读规划器按授权、配额、预算和独立样本质量提出路线建议，不执行模型请求：
+
+```sh
+python -m knowledge.routing examples/routing-input.json
+```
+
+默认预算为零、未登记已验证提供商，因此示例排队。实际账号权益、余额、质量样本和认证状态必须在私有配置中核验；产品积分、tokens和neurons分别计量，模拟成绩不能替代真实模型验证。
