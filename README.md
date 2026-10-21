@@ -36,3 +36,12 @@ python -m knowledge.routing examples/routing-input.json
 ```
 
 默认预算为零、未登记已验证提供商，因此示例排队。实际账号权益、余额、质量样本和认证状态必须在私有配置中核验；产品积分、tokens和neurons分别计量，模拟成绩不能替代真实模型验证。
+
+## 重要决议存档
+
+[决议治理规则](docs/decision-governance.md)：每个重要决定保留正文、依据、取舍、状态及复审条件。私有档案按版本追加，支持索引导出和哈希链核验；来源/审核操作自动记录，其他重要决定由执行智能体显式归档。建议不自动视为用户确认，实际决议不进入本公开仓库。
+
+```sh
+python -m knowledge.decisions --vault /absolute/private-vault export
+python -m knowledge.decisions --vault /absolute/private-vault verify
+```

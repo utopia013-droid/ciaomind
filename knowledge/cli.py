@@ -87,7 +87,10 @@ def init(vault):
 
 
 def event(db, kind, detail):
-    db.execute('INSERT INTO events(time,kind,detail) VALUES(?,?,?)', (now(), kind, encoded(detail)))
+    cursor = db.execute('INSERT INTO events(time,kind,detail) VALUES(?,?,?)', (now(), kind, encoded(detail)))
+    if kind in ('source_registered', 'source_disabled', 'human_review'):
+        from .decisions import operational
+        operational(db, kind, detail, cursor.lastrowid)
 
 
 def add_source(vault, path, authorship):
@@ -104,6 +107,9 @@ def add_source(vault, path, authorship):
             raise ValueError('Authorship cannot be changed; disable source and register a new folder')
         db.execute('INSERT INTO sources(id,path,authorship) VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET enabled=1', (sid, str(path), authorship))
         event(db, 'source_registered', {'source_id': sid, 'authorship': authorship})
+    from .decisions import export as export_decisions
+    db.close()
+    export_decisions(vault)
     print('Registered source ' + sid)
     return sid
 
@@ -171,6 +177,8 @@ def forget_document(db, doc_id):
             tombstone = {'statement': '[source removed or revised; re-extraction required]', 'kind': 'hypothesis', 'evidence': [], 'conditions': '', 'counterevidence': ''}
             db.execute('UPDATE claims SET body=?,state=\'stale\',public=0,updated=? WHERE id=?', (encoded(tombstone), now(), row['id']))
             db.execute('DELETE FROM reviews WHERE claim_id=?', (row['id'],))
+            from .decisions import invalidate_claim
+            invalidate_claim(db, row['id'])
     db.execute('DELETE FROM documents WHERE id=?', (doc_id,))
 
 
@@ -228,6 +236,8 @@ def sync(vault):
         event(db, 'sync', counts)
     db.execute('VACUUM')
     db.close()
+    from .decisions import export as export_decisions
+    export_decisions(vault)
     print(encoded(counts))
     return counts
 
@@ -244,6 +254,8 @@ def disable(vault, source_id):
         event(db, 'source_disabled', {'source_id': source_id})
     db.execute('VACUUM')
     db.close()
+    from .decisions import export as export_decisions
+    export_decisions(vault)
     print('Source disabled; derived material purged. Original files untouched.')
 
 
@@ -362,6 +374,9 @@ def review(vault, claim_id, decision, public=False):
             target = vault / folder
             if target.exists():
                 shutil.rmtree(target)
+    from .decisions import export as export_decisions
+    db.close()
+    export_decisions(vault)
     print('Review recorded. No content sent externally.')
 
 
