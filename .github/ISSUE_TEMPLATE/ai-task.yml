@@ -1,0 +1,32 @@
+name: AI任务
+description: 提交一个可验收的任务（勿填敏感资料）
+title: "[任务] "
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 任务类型
+      options:
+        - 代码
+        - 研究
+        - 办公
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: 目标与范围
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收条件
+      description: 请列出可检查的交付物和通过标准
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: 来源与约束
+      description: 公开链接、允许修改范围、成本限制
