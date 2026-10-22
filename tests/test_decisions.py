@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import tempfile
+import subprocess
 import unittest
 from knowledge import cli, decisions
 
@@ -86,6 +87,64 @@ class DecisionTests(unittest.TestCase):
         self.assertEqual(len(records), 2)
         self.assertNotIn('private-original-canary', json.dumps(records))
         self.assertTrue((self.vault / 'decision-archive' / 'index.md').exists())
+        db.close()
+
+
+    def test_archive_directory_symlink_rejected_without_touching_git(self):
+        outside = self.root / 'public-repo'
+        outside.mkdir()
+        subprocess.run(['git', 'init', '-q', str(outside)], check=True)
+        readme = outside / 'README.md'
+        readme.write_text('unrelated-public-content')
+        (self.vault / 'decision-archive').symlink_to(outside, target_is_directory=True)
+        with self.assertRaises(ValueError):
+            decisions.export(self.vault)
+        self.assertEqual(readme.read_text(), 'unrelated-public-content')
+        self.assertFalse((outside / 'history.jsonl').exists())
+
+    def test_export_preserves_unrelated_files_and_rejects_file_symlinks(self):
+        decisions.store(self.vault, draft(), 'operator', 'proposal')
+        archive = self.vault / 'decision-archive'
+        readme = archive / 'README.md'
+        readme.write_text('keep this personal annotation')
+        decisions.export(self.vault)
+        self.assertEqual(readme.read_text(), 'keep this personal annotation')
+        external = self.root / 'external.md'
+        external.write_text('external content')
+        (archive / 'index.md').unlink()
+        (archive / 'index.md').symlink_to(external)
+        with self.assertRaises(ValueError):
+            decisions.export(self.vault)
+        self.assertEqual(external.read_text(), 'external content')
+
+    def test_changed_human_review_supersedes_operation_and_invalidates_dependents(self):
+        _, db = cli.connect(self.vault)
+        with db:
+            first = decisions.operational(db, 'human_review', {'claim_id':'claim-1','decision':'confirm','public':True}, 1)
+            record = draft()
+            record.update(status='accepted', approval_reference='example', related_claim_ids=['claim-1'])
+            dependent = decisions.append(db, record, 'operator', 'accepted dependent')
+            newest = decisions.operational(db, 'human_review', {'claim_id':'claim-1','decision':'reject','public':False}, 2)
+        records = {item['decision_id']:item for item in decisions.latest(db)}
+        self.assertEqual(records[first['decision_id']]['record']['status'], 'superseded')
+        self.assertEqual(records[dependent['decision_id']]['record']['status'], 'needs_review')
+        self.assertEqual(newest['record']['replaces'], [first['decision_id']])
+        self.assertTrue(decisions.verify(db))
+        db.close()
+
+    def test_repeated_review_keeps_dependent_but_public_revoke_invalidates(self):
+        _, db = cli.connect(self.vault)
+        detail = {'claim_id':'claim-1','decision':'confirm','public':True}
+        with db:
+            decisions.operational(db,'human_review',detail,1)
+            record = draft()
+            record.update(status='accepted', approval_reference='example', related_claim_ids=['claim-1'])
+            dependent = decisions.append(db,record,'operator','accepted')
+            decisions.operational(db,'human_review',detail,2)
+        self.assertEqual(next(r for r in decisions.latest(db) if r['decision_id']==dependent['decision_id'])['record']['status'], 'accepted')
+        with db:
+            decisions.operational(db,'human_review',dict(detail,public=False),3)
+        self.assertEqual(next(r for r in decisions.latest(db) if r['decision_id']==dependent['decision_id'])['record']['status'], 'needs_review')
         db.close()
 
     def test_invalidated_claim_marks_decision_for_review(self):

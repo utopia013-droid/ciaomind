@@ -6,9 +6,10 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import tempfile
 import uuid
 
-from .cli import connect, encoded
+from .cli import connect, encoded, private_path
 
 STATES = {'proposed', 'accepted', 'implemented', 'rejected', 'superseded', 'revoked', 'needs_review'}
 TEXT_FIELDS = ('title', 'decision', 'rationale', 'scope', 'owner', 'authority', 'effective_when')
@@ -111,6 +112,21 @@ def invalidate_claim(db, claim_id):
 def operational(db, kind, detail, event_id):
     # IDs only: do not duplicate private source passages into permanent decision history.
     titles = {'source_registered': '登记资料来源范围', 'source_disabled': '停用资料来源', 'human_review': '记录核心主张审核操作'}
+    replacements = []
+    if kind == 'human_review':
+        prior = [item for item in latest(db) if detail['claim_id'] in item['record']['related_claim_ids'] and item['record']['status'] in ('accepted', 'implemented', 'needs_review')]
+        previous_operations = [item for item in prior if item['record']['authority'] == 'operator-action' and item['record']['title'] == titles[kind]]
+        changed = not previous_operations or any(item['record']['decision'] != encoded(detail) for item in previous_operations)
+        for item in prior:
+            old = item['record']
+            if item in previous_operations:
+                old['status'] = 'superseded'
+                replacements.append(item['decision_id'])
+            elif changed and old['status'] in ('accepted', 'implemented'):
+                old['status'] = 'needs_review'
+            else:
+                continue
+            append(db, old, 'review-monitor', 'A newer human review replaces the prior operation; dependent decisions require review when its outcome or public consent changes.', item['decision_id'], item['revision'])
     record = {
         'title': titles[kind], 'decision': encoded(detail),
         'rationale': '保存显式操作的治理记录；不独立证明操作者身份，也不替代原始用户授权。',
@@ -119,9 +135,25 @@ def operational(db, kind, detail, event_id):
         'basis': ['private-events:' + str(event_id)], 'alternatives': ['不执行该操作'],
         'review_triggers': ['来源或授权变化', '相关证据失效', '操作者纠正'],
         'related_claim_ids': [detail['claim_id']] if 'claim_id' in detail else [],
-        'replaces': [], 'status': 'implemented',
+        'replaces': replacements, 'status': 'implemented',
     }
     return append(db, record, 'local-operator', 'Automatic record of explicit local operation')
+
+
+def write_archive(path, content):
+    """Atomically replace an owned view without following file symlinks/hardlinks."""
+    if path.is_symlink():
+        raise ValueError('Archive file must not be a symlink')
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=path.parent, prefix='.decision-', delete=False) as stream:
+            temporary = Path(stream.name)
+            temporary.chmod(0o600)
+            stream.write(content)
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
 
 
 def export(vault):
@@ -129,9 +161,15 @@ def export(vault):
     try:
         records = latest(db)
         directory = vault / 'decision-archive'
+        if directory.is_symlink() or directory.resolve() != directory:
+            raise ValueError('Archive directory must not be a symlink')
+        private_path(directory)
         directory.mkdir(exist_ok=True, mode=0o700)
-        for old in directory.glob('*.md'):
-            old.unlink()
+        directory.chmod(0o700)
+        targets = [directory / (item['decision_id'] + '.md') for item in records] + [directory / 'index.md', directory / 'history.jsonl']
+        if any(path.is_symlink() for path in targets):
+            raise ValueError('Archive files must not be symlinks')
+        # Preserve unrelated files. Only atomically replace the generated views.
         links = ['# 决议档案索引', '', '仅用于私有治理。accepted 表示已记录确认依据，不代表密码学身份认证。', '']
         history = [json.loads(r['envelope']) for r in db.execute('SELECT envelope FROM decision_revisions ORDER BY seq')]
         for envelope in records:
@@ -144,15 +182,12 @@ def export(vault):
             lines.extend(['## 确认依据', '', record.get('approval_reference') or '未记录本人确认；实施记录不等于核心立场已获本人批准。', '', '## 追加修订历史', ''])
             lines.extend('- r' + str(item['revision']) + ' ' + item['recorded_at'] + ' ' + item['record']['status'] + ' — ' + item['change_reason'] for item in history if item['decision_id'] == did)
             path = directory / (did + '.md')
-            path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
-            path.chmod(0o600)
+            write_archive(path, '\n'.join(lines) + '\n')
             links.append('- [' + did + '](' + did + '.md) · ' + record['status'] + ' · ' + record['title'])
         archive = directory / 'history.jsonl'
-        archive.write_text(''.join(encoded(dict(row)) + '\n' for row in db.execute('SELECT * FROM decision_revisions ORDER BY seq')), encoding='utf-8')
-        archive.chmod(0o600)
+        write_archive(archive, ''.join(encoded(dict(row)) + '\n' for row in db.execute('SELECT * FROM decision_revisions ORDER BY seq')))
         index = directory / 'index.md'
-        index.write_text('\n'.join(links) + '\n', encoding='utf-8')
-        index.chmod(0o600)
+        write_archive(index, '\n'.join(links) + '\n')
         return index
     finally:
         db.close()

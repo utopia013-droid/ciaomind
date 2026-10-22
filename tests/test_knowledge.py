@@ -229,6 +229,23 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(self.rows('claims')[0]['state'], 'stale')
         self.assertFalse((self.vault / 'outbox' / 'approved-statements.json').exists())
 
+
+    def test_reject_after_confirmation_updates_decision_history(self):
+        from knowledge import decisions
+        cid = self.complete()
+        cli.review(self.vault,cid,'confirm',True)
+        _, db = cli.connect(self.vault)
+        first = next(r for r in decisions.latest(db) if cid in r['record']['related_claim_ids'])
+        db.close()
+        cli.review(self.vault,cid,'reject')
+        _, db = cli.connect(self.vault)
+        records = decisions.latest(db)
+        self.assertEqual(next(r for r in records if r['decision_id']==first['decision_id'])['record']['status'], 'superseded')
+        newest = next(r for r in records if cid in r['record']['related_claim_ids'] and r['record']['status']=='implemented')
+        self.assertIn(first['decision_id'],newest['record']['replaces'])
+        self.assertEqual(json.loads(newest['record']['decision'])['decision'],'reject')
+        db.close()
+
     def test_failed_import_is_atomic_and_cannot_replay(self):
         self.extract()
         previous = self.rows('claims')
