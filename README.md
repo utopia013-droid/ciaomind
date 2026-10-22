@@ -45,3 +45,7 @@ python -m knowledge.routing examples/routing-input.json
 python -m knowledge.decisions --vault /absolute/private-vault export
 python -m knowledge.decisions --vault /absolute/private-vault verify
 ```
+
+## 协同责任与语言
+
+[协同架构说明](docs/collaboration-architecture.md) 定义中文治理、原语证据、结构化JSON交接，以及规划角色、确定性调度、执行与独立审查的职责。控制论与博弈论用于设计可观测反馈和激励约束；多目标取舍、哲学解释和目标执行能力均须按说明验证，不能据此宣称已自动运营。
