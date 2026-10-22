@@ -1,0 +1,33 @@
+{
+  "policy": {
+    "paid_enabled": false,
+    "per_attempt_usd": 0,
+    "max_attempts_per_stage": 2,
+    "max_attempts_per_workflow": 8,
+    "minimum_evaluations": 20,
+    "minimum_quality_lower_bound": 0.8,
+    "evaluation_window_days": 30,
+    "human_usd_per_hour": null
+  },
+  "task": {
+    "data_class": "public",
+    "input_tokens": 4000,
+    "max_output_tokens": 1000,
+    "attempts_so_far": 0,
+    "workflow_attempts_so_far": 0,
+    "required_units": {},
+    "stage": "extract",
+    "language": "zh",
+    "prompt_version": "worldview-v1",
+    "mode": "live",
+    "task_family": "worldview-candidate",
+    "evaluation_set": "worldview-v1",
+    "rubric_version": "evidence-v1"
+  },
+  "providers": [],
+  "observations": [],
+  "budget": {
+    "daily_remaining_usd": 0,
+    "monthly_remaining_usd": 0
+  }
+}
