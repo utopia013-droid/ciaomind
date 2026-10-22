@@ -49,3 +49,7 @@ python -m knowledge.decisions --vault /absolute/private-vault verify
 ## 协同责任与语言
 
 [协同架构说明](docs/collaboration-architecture.md) 定义中文治理、原语证据、结构化JSON交接，以及规划角色、确定性调度、执行与独立审查的职责。控制论与博弈论用于设计可观测反馈和激励约束；多目标取舍、哲学解释和目标执行能力均须按说明验证，不能据此宣称已自动运营。
+
+## 人与工具的联盟治理
+
+[联盟章程草案](docs/coalition-charter.md) 把人的时间、现金、精力和现实收益纳入评价，说明各角色及平台可观察的目标、互惠、停止与退出机制，并提出四周小问题验证。它是治理方案，不表示平台已加入联盟或自动执行已接通。
