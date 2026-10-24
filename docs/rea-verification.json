@@ -1,0 +1,92 @@
+{
+  "verified_on": "2026-10-24",
+  "project": "morluto/rea",
+  "installation_status": "installed_in_local_isolated_image",
+  "integration_status": "synthetic_wrapper_verified",
+  "image_tag": "ciaomind-rea:6.7.0",
+  "image_id": "sha256:6dba4120bc1f29c251160a99f06766a0f05546fb96f4da9a04fc3318083c6806",
+  "base_image": "node:24-bookworm-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205",
+  "tool_name": "rea-agents",
+  "tool_version": "6.7.0",
+  "node_version": "v24.22.1",
+  "release_commit": "27dc42d10249f0410904a75c0997842eb03b931c",
+  "npm_integrity": "sha512-yhIx2ioJYYT1C/tONfYeitC6LhnKmCh+ZwRUOgYuhSc733lGhkkt73zhug9WmLgxoMdKuqIYGCoBfD4fXkOhFw==",
+  "npm_engines": "^22.19.0 || ^24.11.0 || >=26.0.0",
+  "npm_install_flags": [
+    "ci",
+    "--strict-ssl=true",
+    "--omit=optional",
+    "--ignore-scripts"
+  ],
+  "build_tls": "enabled; proxy CA supplied only as BuildKit secret",
+  "runtime_controls": {
+    "network": "none",
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "read_only_root": true,
+    "user": "1000:1000",
+    "memory": "1g",
+    "cpus": 2,
+    "pids_limit": 128,
+    "timeout_seconds": 120,
+    "mounts": [
+      "bounded synthetic snapshot readonly",
+      "result directory writable"
+    ],
+    "global_mcp_or_agent_config_changes": false
+  },
+  "model_api_calls": false,
+  "paid_services": false,
+  "exit_code": 0,
+  "source_tree_sha256": "6213cda4de05cb0d0a59c35c76ff69ff61b051ff8bd5d546709a26cd30e627af",
+  "source_files": 3,
+  "source_bytes": 649,
+  "acceptance": {
+    "envelope_ok": true,
+    "parse_failures": 0,
+    "parsed_javascript_files": 2,
+    "coverage": {
+      "status": "complete",
+      "truncated": false,
+      "omitted_count": 0,
+      "limits": []
+    },
+    "target_executed_marker_present": false,
+    "input_and_artifact_hashes_recomputed": true,
+    "tree_hash_recomputed": true,
+    "boundary_refusals_checked": [
+      "existing_output",
+      "repository_output",
+      "mount_option_delimiters",
+      "mutable_image_tag"
+    ]
+  },
+  "wrapper_file": "scripts/rea_worker.py",
+  "wrapper_sha256": "e4b1f85c97ec991cf61ee022c7124c2fb06495ae83e63bddd3aafcbbc827839d",
+  "wrapper_result": "local-only artifact; original fingerprints retained",
+  "artifact_sha256": {
+    "Dockerfile": "adc48a6e9d3758f429e68bdc0eb3687f893f6ed67731e2c8c7a33e0b86275c84",
+    "package.json": "a0cd1890b0af265e7eff030750d9e97828ef74069e24d6971bbe790c7d682cb7",
+    "package-lock.json": "463736b500657ad03fdf24c52de68989ee1657f0d26401b1ef3140f48b8bce4f",
+    "input.json": "91ed797282a10c52e8f06c59204c29f51783ab532f3cc7404a04d27fd73ff339",
+    "wrapper-final-result/result.json": "b486fd5cbfd6fe06cce4800a5ceac8c30b106168ac128ccddb86b1dde8a0d885",
+    "wrapper-final-result/analysis.json": "e5aabc7d40afff30983180a6bdbb9e9fec79d00f889267fed1d98c270b36ce06",
+    "wrapper-final-result/stderr.txt": "8e6e1f0ecb1daccc733be4b71f98224971be33950103b8a7c73c8f90be8431c8",
+    "wrapper-final-result/source-manifest.json": "c5ff988b34bbb0a23fb9ade2a4ebf1905c2617d13fc8121d376063267ba329c7",
+    "wrapper-final-result/tool.json": "79575106481adc88d970ee9c1b4814a12cf6a58c2ed36961c9fd60817ded1325"
+  },
+  "limitations": [
+    "CommonJS and ESM binding relationships were recovered from inert syntax and resolved only within the inventoried artifact container.",
+    "JavaScript and HTML were parsed as inert text; bundle bootstrap code was never executed.",
+    "Static imports, entrypoints, workers, endpoints, and storage relationships do not prove runtime execution.",
+    "Static paths and relationships may remain unresolved when expressions are dynamic or obfuscated.",
+    "Webpack/Rspack factories were recovered from AST literals; REA did not invoke push handlers or bundle bootstrap code.",
+    "Only selected JS/TS sources and package.json were snapshotted; .git, node_modules, other assets and external dependencies are excluded.",
+    "Complete static graph coverage does not prove runtime behavior or complete feature reconstruction.",
+    "This execution does not register MCP clients, install agent skills or enable background processing.",
+    "Native providers and proprietary applications were not installed or tested.",
+    "Only this synthetic source fixture was analyzed; this does not claim all top-20 projects are runnable or analyzed.",
+    "Host is Linux; Windows desktop consumption and MCP registration remain unverified.",
+    "Review by an independent agent and PR merge remain separate acceptance steps."
+  ]
+}

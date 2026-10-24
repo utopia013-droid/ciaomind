@@ -1,0 +1,6 @@
+{
+  "task_id": "CIAO-REA-SYNTHETIC-001",
+  "input_version": 1,
+  "operation": "javascript_static",
+  "source_path": "source"
+}

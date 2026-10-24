@@ -20,3 +20,16 @@
 已提供 MarkItDown 文档转换、Trafilatura 本地 HTML 正文提取、DuckDB 本地 CSV 概况的统一适配器。执行者可在任务中调用，输入/结果以任务 ID、版本和 SHA256 回读。版本由 `uv.lock` 锁定，不调用模型 API。
 
 安装、示例与实际验收边界见 [开源工具协同](docs/oss-tools.md)。它补充当前任务入口；常驻执行、Windows 桌面领取与模型 API 接入仍需各自验证。
+
+## 全站高星前 20 与 REA
+
+[2026-10-24 全站前20逐项融合记录](docs/github-top20-20261024.md)列明星数快照、实际许可、用途和验证状态。源码参考、本地技能资料、隔离 CLI 与已完成任务分别记录。
+
+```bash
+python scripts/project_catalog.py list
+python scripts/project_catalog.py route --capability code_review
+python scripts/mirror_projects.py --root /tmp/ciaomind-project-sources
+python scripts/project_catalog.py search --root /tmp/ciaomind-project-sources --query database --limit 5
+```
+
+REA 的 Linux/Docker 任务适配器见 [REA 使用说明](docs/rea-integration.md)，输入与结果沿用任务ID、版本及SHA256契约。它可对经过筛选的本地JS/TS源码做静态分析；解析失败和覆盖不足会保留在回执中。

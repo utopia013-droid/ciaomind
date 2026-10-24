@@ -1,0 +1,135 @@
+{
+  "task_id": "CIAOMIND-WEBSITE-REA-20261024",
+  "input_version": 1,
+  "input_sha256": "fb2421a4333b1718460cb97ba66f551f1f24e2317e58f2b1bf3736d1d317d365",
+  "operation": "javascript_static",
+  "source_tree_sha256": "301d3eeed7545c0b7e9a0d0637551a5192dceb8bcd1ca114d9783760f7523a77",
+  "source_file_count": 52,
+  "source_bytes": 95086,
+  "image_id": "sha256:6dba4120bc1f29c251160a99f06766a0f05546fb96f4da9a04fc3318083c6806",
+  "tool_name": "rea-agents",
+  "tool_version": "6.7.0",
+  "status": "partial",
+  "exit_code": 0,
+  "coverage": {
+    "status": "partial",
+    "truncated": false,
+    "omitted_count": null,
+    "limits": [
+      {
+        "name": "javascript_analysis_parent_available_result_budget_bytes",
+        "value": 0,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_parent_available_result_budget_bytes",
+        "value": 2743748,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_parent_result_budget_bytes",
+        "value": 104817740,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_semantic_result_budget_bytes",
+        "value": 0,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_semantic_result_budget_bytes",
+        "value": 156,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_semantic_result_budget_bytes",
+        "value": 15926,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_semantic_result_budget_bytes",
+        "value": 31734,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_worker_heap_limit_bytes",
+        "value": 1098907648,
+        "unit": "bytes"
+      },
+      {
+        "name": "javascript_analysis_worker_timeout_ms",
+        "value": 300000,
+        "unit": "milliseconds"
+      }
+    ]
+  },
+  "statistics": {
+    "relevant_files": 52,
+    "nested_asar_containers": 0,
+    "text_bytes_read": 95086,
+    "invalid_utf8_files": 0,
+    "parsed_javascript_files": 51,
+    "skipped_javascript_files": 0,
+    "visited_ast_nodes": 12182,
+    "findings": 291,
+    "modules": 0,
+    "parse_failures": 0
+  },
+  "outputs": [
+    {
+      "path": "analysis.json",
+      "sha256": "9f3f725d895698b27cdb8acb5db5ad6d11545024fb0b626653e8086cfee76518"
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "a79384bdc5c8fe41ebc167ab7090806f0c09505a3f35cee261977c8ee9002952"
+    },
+    {
+      "path": "exit-code.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "source-manifest.json",
+      "sha256": "6062c95464096b8e9846a97c50206bc62521ae8ac7f5c9e540da077d7a6ccba8"
+    },
+    {
+      "path": "tool.json",
+      "sha256": "79575106481adc88d970ee9c1b4814a12cf6a58c2ed36961c9fd60817ded1325"
+    }
+  ],
+  "limitations": [
+    "CommonJS and ESM binding relationships were recovered from inert syntax and resolved only within the inventoried artifact container.",
+    "Graph coverage is incomplete; unavailable facts remain explicit and must not be read as absence.",
+    "JavaScript and HTML were parsed as inert text; bundle bootstrap code was never executed.",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for data/team.ts exceed the parent's result budget; complete static facts were retained on the file node",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for i18n.ts exceed the parent's result budget; complete static facts were retained on the file node",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for i18n/request.ts exceed the parent's result budget; complete static facts were retained on the file node",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for lib/i18n.ts exceed the parent's result budget; complete static facts were retained on the file node",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for lib/seo.ts exceed the parent's result budget; complete static facts were retained on the file node",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for middleware.ts exceed the parent's result budget; complete static facts were retained on the file node",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for next.config.mjs exceed the parent's result budget; complete static facts were retained on the file node",
+    "Resource constraint during analyze_javascript_application: Expanded application relationships for postcss.config.js exceed the parent's result budget; complete static facts were retained on the file node",
+    "Static imports, entrypoints, workers, endpoints, and storage relationships do not prove runtime execution.",
+    "Static paths and relationships may remain unresolved when expressions are dynamic or obfuscated.",
+    "Webpack/Rspack factories were recovered from AST literals; REA did not invoke push handlers or bundle bootstrap code.",
+    "components/animations/ParticleBackground.tsx: Resource constraint during analyze_javascript_application: Semantic graph for components/animations/ParticleBackground.tsx exceeds the parent's remaining result budget; static and module facts were retained",
+    "data/company.ts: Resource constraint during analyze_javascript_application: Completed module facts for data/company.ts exceed the parent's offered result budget; static facts were retained",
+    "data/milan-roundtable.ts: Resource constraint during analyze_javascript_application: Completed module facts for data/milan-roundtable.ts exceed the parent's offered result budget; static facts were retained",
+    "data/services.ts: Resource constraint during analyze_javascript_application: Completed module facts for data/services.ts exceed the parent's offered result budget; static facts were retained",
+    "data/team.ts: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of data/team.ts was not started",
+    "i18n.ts: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of i18n.ts was not started",
+    "i18n/request.ts: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of i18n/request.ts was not started",
+    "lib/i18n.ts: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of lib/i18n.ts was not started",
+    "lib/seo.ts: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of lib/seo.ts was not started",
+    "middleware.ts: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of middleware.ts was not started",
+    "next.config.mjs: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of next.config.mjs was not started",
+    "postcss.config.js: Resource constraint during analyze_javascript_application: The parent reserved its remaining result capacity for static observations; semantic analysis of postcss.config.js was not started",
+    "Only selected JS/TS sources and package.json were snapshotted; .git, node_modules, other assets and external dependencies are excluded.",
+    "Complete static graph coverage does not prove runtime behavior or complete feature reconstruction.",
+    "This execution does not register MCP clients, install agent skills or enable background processing.",
+    "Analysis retained partial parsing or coverage; review the original Evidence before reuse."
+  ],
+  "next_step": "Independently review retained Evidence and selected-source coverage before implementing any inferred feature.",
+  "source_repository": "https://github.com/utopia013-droid/ciaomind-website",
+  "source_commit": "6a1d6e1c11ddd1d8fee09afbf15e2d0435c48b98"
+}

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/oss-lab/hermes-lab/tools/crane",
+    "export",
+    "nousresearch/hermes-agent@sha256:fd822bae0a61bf023450737edbeaeea5fc6460f17cb4ee240a7e67b306ed63fb",
+    "/workspace/oss-lab/hermes-lab/rootfs.tar"
+  ],
+  "exit_code": 0,
+  "max_tar_bytes": 4294967296,
+  "actual_tar_bytes": 3081224192,
+  "elapsed_seconds": 86.1
+}
