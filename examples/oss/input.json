@@ -1,0 +1,6 @@
+{
+  "task_id": "CIAO-OSS-SYNTHETIC-001",
+  "input_version": 1,
+  "operation": "csv_profile",
+  "source_path": "sample.csv"
+}

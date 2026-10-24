@@ -1,0 +1,163 @@
+{
+  "date": "2026-10-24",
+  "status": "cli_verified",
+  "image": "ciaomind-node-runtimes:20261024",
+  "image_id": "sha256:a79771e2e5301b6985a2cf8a25f714ebb1191fe247b6d5bfba71a3979d5493c6",
+  "base_image": "node:24.22.1-bookworm-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205",
+  "versions": {
+    "openclaw": "2026.10.7",
+    "@deepseek-ai/dsh": "0.2.1-rc.2"
+  },
+  "integrities": {
+    "openclaw": "sha512-iiZO+kFFBgQvxm17wn3Sc/MSC/GQu01PubAFVNA2Nn736HOHUbR0ra7a9NeW9wpjq3kDkSJ1RB7dTP+qVJFXig==",
+    "@deepseek-ai/dsh": "sha512-tvY+yhfKRifthbqPe/OK0AYxM5ZkvqfYq/jMYgJcEUxiRRL1Vwra3Ti5TB6AXgSWQdiPHYh/Vp6SJa9yHwMNuw=="
+  },
+  "network_during_verification": "none",
+  "nonroot": true,
+  "checks": [
+    {
+      "check": "node-version",
+      "command": [
+        "node",
+        "--version"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.012,
+      "stdout_path": "node-version.stdout",
+      "stderr_path": "node-version.stderr",
+      "stdout_sha256": "249baf635bb43877fcb9422efa1a4904b702d0ddf14d3949b7cd0950d5229c81",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_preview": "v24.22.1\n",
+      "stderr_preview": ""
+    },
+    {
+      "check": "openclaw-version",
+      "command": [
+        "openclaw",
+        "--version"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.139,
+      "stdout_path": "openclaw-version.stdout",
+      "stderr_path": "openclaw-version.stderr",
+      "stdout_sha256": "eede0e1a4488fb71b804ff7119950dfe4db84e8ac665ff17e67086da7a545596",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_preview": "OpenClaw 2026.10.7 (157d8c2)\n",
+      "stderr_preview": ""
+    },
+    {
+      "check": "openclaw-help",
+      "command": [
+        "openclaw",
+        "--help"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.176,
+      "stdout_path": "openclaw-help.stdout",
+      "stderr_path": "openclaw-help.stderr",
+      "stdout_sha256": "20823c8b57c35e3eeb53d84ad87a6360fe838833d9e74e3c15761d28b4db1c36",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_preview": "\nOpenClaw 2026.10.7 (157d8c2) — All your chats, one OpenClaw.\n\nUsage: openclaw [options] [command]\n\nOptions:\n  --container <name>   Run the CLI inside a running Podman/Docker container\n                       named <name> (default: env OPENCLAW_CONTAINER)\n  --dev                Dev profile: isolate state under ~/.openclaw-dev, default\n                       gateway port 19001, and shift derived ports\n                       (browser/canvas)\n  -h, --help           Display help for command\n  --log-l",
+      "stderr_preview": ""
+    },
+    {
+      "check": "dsh-version",
+      "command": [
+        "dsh",
+        "--version"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.138,
+      "stdout_path": "dsh-version.stdout",
+      "stderr_path": "dsh-version.stderr",
+      "stdout_sha256": "6312cdd7ce8f53d230d3069725a26b3e01431f2ef4d9c127f7dd42e49a61ca54",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_preview": "0.2.1-rc.2\n",
+      "stderr_preview": ""
+    },
+    {
+      "check": "dsh-help",
+      "command": [
+        "dsh",
+        "--help"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.184,
+      "stdout_path": "dsh-help.stdout",
+      "stderr_path": "dsh-help.stderr",
+      "stdout_sha256": "1622bf1e4dbf97d7e3964db53245e3b300bfe3cf4ebc7e77cb1ac134635a2585",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_preview": "Usage: dsh [--profile] <name> [options] [app-args...]\n       dsh plugin --profile <name> <pnpm-args...>\n\ndsh: boot a DeepSeek Harness profile — an ordered stack of plugin-bundle patch\nlayers under your own overrides.\n\nArguments:\n  args                           arguments for the booted profile's app (see:\n                                 dsh --profile <name> --help)\n\nOptions:\n  -V, --version                  output the version number\n  --profile <name>               the profile under $DSH_HOME/p",
+      "stderr_preview": ""
+    },
+    {
+      "check": "dsh-default-config",
+      "command": [
+        "dsh",
+        "--profile",
+        "sdk-minimal",
+        "--dump-default-config"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 67.49,
+      "stdout_path": "dsh-default-config-fixed.stdout",
+      "stderr_path": "dsh-default-config-fixed.stderr",
+      "stdout_sha256": "56feccf005343a895dafccff19abec975a43a9f0f3ed70cb929eef457e5dd1c5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_preview": "# == @deepseek-ai/dsh-sdk-minimal\n- id: sdk-app-startup\n  name: '@deepseek-ai/dsh-sdk-app'\n  config:\n    profile: sdk-minimal\n- id: sdk-jsonrpc-server\n  name: '@deepseek-ai/dsh-sdk-jsonrpc-server'\n  inject:\n    - sdkAppStartup\n    - loader\n  config:\n    maxTokensAsSuccess: false\n- id: deepseek-llm-api-extensions\n  name: '@deepseek-ai/dsh-deepseek-llm-api-extensions'\n- id: session-log-deepseek\n  name: '@deepseek-ai/dsh-session-log-deepseek'\n- id: plugin-package-inventory-deepseek\n  name: '@deepse",
+      "stderr_preview": "",
+      "isolation_fix": "/home/node tmpfs uid=1000,gid=1000,mode=0700"
+    }
+  ],
+  "limitations": [
+    "Dependency lifecycle scripts were disabled; the reviewed official OpenClaw package postinstall was run offline to complete its package lifecycle. Only recorded CLI/config checks are verified.",
+    "DeepSeek Harness version is a release candidate / developer preview.",
+    "No onboarding, daemon, gateway, model, key, provider or real task has been configured or invoked.",
+    "CLI installation does not establish an authenticated model worker connection."
+  ],
+  "artifact_sha256": {
+    "Dockerfile": "4ff289cdd59ecfbddcdfb08c4c7f55a3aa32a174a9e889b9abda55a7eacbb50c",
+    "openclaw-package-lock.json": "26f5bc528ad05056dbedc6e665d3079f7a8221e684ffdb91f976fcbb5dd3dcaa",
+    "dsh-package-lock.json": "7728ef06ceadd9ed1bb51dc69ef0dd15202547b2fa88258e402f9b94d56df75a",
+    "openclaw-npm-metadata.json": "a54064b685bde2d9e5df77a19f5fa0d4d158aa8f7c8f1f8f5d99ba100b09765d",
+    "dsh-npm-metadata.json": "910adcfd3b72c7b2c0344a4af9ec13b872361f63774414beb1f5fcf177ca7430"
+  },
+  "runtime_results": {
+    "openclaw": {
+      "installation": "installed",
+      "cli_version_help": "passed",
+      "model_worker": "not_connected"
+    },
+    "deepseek_harness": {
+      "installation": "installed",
+      "cli_version_help": "passed",
+      "default_config": "passed_after_tmpfs_ownership_fix",
+      "model_worker": "not_connected"
+    }
+  },
+  "initial_failure": {
+    "record": {
+      "check": "dsh-default-config",
+      "command": [
+        "dsh",
+        "--profile",
+        "sdk-minimal",
+        "--dump-default-config"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.157,
+      "stdout_path": "dsh-default-config.stdout",
+      "stderr_path": "dsh-default-config.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d5908920652619f679a189072179ac87b9045ac039ab19af271139321d534c01",
+      "stdout_preview": "",
+      "stderr_preview": "node:fs:1410\n  const result = binding.mkdir(\n                         ^\n\nError: EACCES: permission denied, mkdir '/home/node/.dsh/profiles/sdk-minimal'\n    at mkdirSync (node:fs:1410:26)\n    at initProfile (file:///opt/dsh/node_modules/@deepseek-ai/dsh-app-boot/lib/index.js:612:2)\n    at loadProfile (file:///opt/dsh/node_modules/@deepseek-ai/dsh-app-boot/lib/index.js:1070:3)\n    at prepareProfile (file:///opt/dsh/node_modules/@deepseek-ai/dsh/lib/profile-boot-C14i-8IN.js:218:18)\n    at runDumpCo"
+    },
+    "cause": "Temporary home tmpfs used root ownership, preventing non-root profile-config initialization",
+    "fix": "Use tmpfs uid=1000,gid=1000,mode=0700; same locked image; no rebuild or model initialization"
+  },
+  "verification_scripts_sha256": {
+    "verify.py": "cc27081ad80f504ac1458c84f852a89d02c83e50023e47d61a13ac6a4ce4eeff",
+    "verify-config-fix.py": "fc22d2d776aa90c72fb1aa333cb245632ab3b982cfd37c071d2cfd663a9b5e68"
+  }
+}

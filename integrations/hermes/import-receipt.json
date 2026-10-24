@@ -1,0 +1,19 @@
+{
+  "upstream_image_reference": "nousresearch/hermes-agent@sha256:fd822bae0a61bf023450737edbeaeea5fc6460f17cb4ee240a7e67b306ed63fb",
+  "method": "Official crane export merges upstream layers and whiteouts; docker import creates one local layer",
+  "local_repackaging": true,
+  "image_tag": "ciaomind-hermes-flat:20261024",
+  "exit_code": 0,
+  "image_id": "sha256:007384053a6cd67c97fb58071bd9d619693ad8d0709e581b93957f56b1adc0b6",
+  "upstream_config_sha256": "49b70739d2e8b4206fabf8b089f88337db73f8edaccb93e64b0836694ef10a03",
+  "preserved_config_keys": [
+    "Env",
+    "WorkingDir",
+    "User",
+    "Entrypoint"
+  ],
+  "rootfs_tar_bytes": 3081224192,
+  "rootfs_tar_sha256": "94bd390f574f897639fefb3f8753c81736466793ad035289ae5ecdb5ab1090d4",
+  "config_roundtrip_verified": true,
+  "export_tar_removed_after_successful_import": true
+}

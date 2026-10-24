@@ -1,0 +1,206 @@
+{
+  "project": "NousResearch/hermes-agent",
+  "verified_on": "2026-10-24",
+  "requested_release": "v0.22.5",
+  "requested_image_tag_result": "manifest unknown for nousresearch/hermes-agent:0.22.5",
+  "selected_channel": "official stable rootfs, exported from immutable amd64 digest and locally flattened",
+  "runtime_status": "installed_cli_verified",
+  "local_repackaging": true,
+  "upstream_image_reference": "nousresearch/hermes-agent@sha256:fd822bae0a61bf023450737edbeaeea5fc6460f17cb4ee240a7e67b306ed63fb",
+  "image_reference": "ciaomind-hermes-flat:20261024",
+  "image_id": "sha256:007384053a6cd67c97fb58071bd9d619693ad8d0709e581b93957f56b1adc0b6",
+  "repo_digests": [],
+  "image_size_bytes": 3008500147,
+  "architecture": "amd64",
+  "os": "linux",
+  "labels": null,
+  "checks": [
+    {
+      "arguments": [
+        "--version"
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network=none",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--read-only",
+        "--user=10000:10000",
+        "--memory=2g",
+        "--cpus=2",
+        "--pids-limit=256",
+        "--tmpfs=/tmp:rw,nosuid,nodev,size=128m,uid=10000,gid=10000",
+        "--tmpfs=/opt/data:rw,nosuid,nodev,size=128m,uid=10000,gid=10000",
+        "--env=HERMES_HOME=/opt/data",
+        "--env=PYTHONDONTWRITEBYTECODE=1",
+        "--env=HOME=/opt/data",
+        "--entrypoint=/opt/hermes/bin/hermes",
+        "ciaomind-hermes-flat:20261024",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "7711e61e5d5a699b49a4b42172fb911db6e3976ebe29eea52280528bb7b67c79",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_excerpt": "Hermes Agent v0.22.5 (2026.9.24) · upstream bf0203a7\nInstall directory: /opt/hermes\nInstall method: docker\nPython: 3.14.9\nOpenAI SDK: 2.24.0\n",
+      "stderr_excerpt": ""
+    },
+    {
+      "arguments": [
+        "--help"
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network=none",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--read-only",
+        "--user=10000:10000",
+        "--memory=2g",
+        "--cpus=2",
+        "--pids-limit=256",
+        "--tmpfs=/tmp:rw,nosuid,nodev,size=128m,uid=10000,gid=10000",
+        "--tmpfs=/opt/data:rw,nosuid,nodev,size=128m,uid=10000,gid=10000",
+        "--env=HERMES_HOME=/opt/data",
+        "--env=PYTHONDONTWRITEBYTECODE=1",
+        "--env=HOME=/opt/data",
+        "--entrypoint=/opt/hermes/bin/hermes",
+        "ciaomind-hermes-flat:20261024",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "93ec7be620531dbce5db5ec4dfd3b1bad3638258a82c3e52e63db7458d69f811",
+      "stderr_sha256": "c892eacaa98635a9573d4819819cb891f703d070e5cfd611d25caa8aa6c09665",
+      "stdout_excerpt": "usage: hermes [-h] [--version] [-z PROMPT] [--usage-file PATH] [-m MODEL]\n              [--provider PROVIDER] [--reasoning LEVEL] [-t TOOLSETS]\n              [--resume SESSION] [--no-restore-cwd] [--in DIR]\n              [--continue [SESSION_NAME]] [--worktree] [--accept-hooks]\n              [--skills SKILLS] [--yolo] [--pass-session-id] [--checkpoints]\n              [--ignore-user-config] [--ignore-rules] [--safe-mode] [--tui]\n              [--native] [--cli] [--dev]\n              <command> ...\n\nHermes Agent - AI assistant with tool-calling capabilities\n\npositional arguments:\n  <command>             Command to run\n    chat                Interactive chat with the agent\n    model               Select default model and provider\n    moa                 Configure Mixture of Agents provider/model slots\n    fallback            Manage fallback providers (tried when the primary\n                        model fails)\n    worktree            Audit and reclaim accumulated git worktrees and merged\n                        branches\n    browser             Real-profile browsing helpers (close a browser locking\n                        its profile)\n    secrets             Manage external secret sources (Bitwarden, 1Password)\n    egress              Manage the iron-proxy egress credential-injection\n                        firewall\n    migrate             Migrate configuration for retired models or deprecated\n                        settings\n    codex-runtime       Manage the optional codex app-server runtime (migrate\n                        MCP config)\n    gateway             Messaging gateway management\n    proxy               Local OpenAI-compatible proxy to OAuth providers\n    lsp                 Language Server Protocol management\n    setup               Interactive setup wizard\n    whatsapp            Set up WhatsApp integration\n    whatsapp-cloud      Set up WhatsApp Business Cloud API integration\n    slack               Slack integration helpers (manifest generation, etc.)\n    send                Send a message to a configured platform (scripts, cron\n                        jobs, CI).\n    logout              Clear authentication for an inference provider\n    auth                Manage pooled provider credentials\n    status              Show status of all components\n    pause               Emergency stop: pause cron/kanban dispatch and new\n                        gateway turns\n    resume              Lift the emergency stop set by `hermes pause`\n    cron                Cron job management\n    webhook             Manage dynamic webhook subscriptions\n    peer                Bot-to-bot DMs across machines (peer Hermes gateways)\n    portal              Set up Nous Portal (login, model pick, Tool Gateway);\n                        see also `portal info`\n    kanban              Multi-profile collaboration board (tasks, links,\n                        comments)\n    project             Manage projects (named, multi-folder workspaces)\n    hooks               Inspect and",
+      "stderr_excerpt": "[hermes] WARNING: this process is PID 1 with no init above it (entrypoint override?). Orphaned child processes will not be reaped and will accumulate as zombies. Use the image's default ENTRYPOINT (docker/entrypoint-dispatch.sh) instead of overriding it, or run with `docker run --init` / `init: true` in Compose.\n"
+    }
+  ],
+  "installation_verified": true,
+  "model_connected": false,
+  "channel_connected": false,
+  "limitations": [
+    "No provider login, API key, model inference, messaging or unattended task was tested.",
+    "The versioned 0.22.5 Docker tag is unavailable; actual image version is recorded by --version.",
+    "Execution used a locally flattened image with official upstream files/config; its image ID differs from the upstream OCI digest.",
+    "Verification used disposable tmpfs state, a read-only image and no host mounts."
+  ],
+  "actual_version": "Hermes Agent v0.22.5 (2026.9.24) · upstream bf0203a7",
+  "python_version": "3.14.9",
+  "source_commit": "bf0203a794a07aac3ff764972ab9087baa4e4f4e",
+  "installation_method": "Verified official crane rootfs export followed by single-layer local Docker import; upstream config preserved",
+  "repackaging_provenance": {
+    "upstream_image_reference": "nousresearch/hermes-agent@sha256:fd822bae0a61bf023450737edbeaeea5fc6460f17cb4ee240a7e67b306ed63fb",
+    "method": "Official crane export merges upstream layers and whiteouts; docker import creates one local layer",
+    "local_repackaging": true,
+    "image_tag": "ciaomind-hermes-flat:20261024",
+    "exit_code": 0,
+    "image_id": "sha256:007384053a6cd67c97fb58071bd9d619693ad8d0709e581b93957f56b1adc0b6",
+    "upstream_config_sha256": "49b70739d2e8b4206fabf8b089f88337db73f8edaccb93e64b0836694ef10a03",
+    "preserved_config_keys": [
+      "Env",
+      "WorkingDir",
+      "User",
+      "Entrypoint"
+    ],
+    "rootfs_tar_bytes": 3081224192,
+    "rootfs_tar_sha256": "94bd390f574f897639fefb3f8753c81736466793ad035289ae5ecdb5ab1090d4",
+    "config_roundtrip_verified": true,
+    "export_tar_removed_after_successful_import": true
+  },
+  "installation_attempts": [
+    {
+      "image": "nousresearch/hermes-agent:0.22.5",
+      "exit_code": 1,
+      "result": "manifest unknown"
+    },
+    {
+      "image": "nousresearch/hermes-agent@sha256:fd822bae0a61bf023450737edbeaeea5fc6460f17cb4ee240a7e67b306ed63fb",
+      "method": "docker pull",
+      "exit_code": 130,
+      "result": "Canceled before VFS cumulative-layer storage exhausted the workspace"
+    },
+    {
+      "image": "ciaomind-hermes-flat:20261024",
+      "method": "single-layer import",
+      "exit_code": 0,
+      "result": "Complete rootfs imported; upstream Env/User/WorkingDir/Entrypoint readback matched"
+    }
+  ],
+  "controls": {
+    "network": "none",
+    "user": "10000:10000",
+    "read_only": true,
+    "cap_drop": "ALL",
+    "no_new_privileges": true,
+    "host_mounts": [],
+    "temporary_writes": "UID-owned tmpfs at /tmp and /opt/data",
+    "memory": "2g",
+    "cpus": 2,
+    "pids_limit": 256
+  },
+  "evidence": [
+    {
+      "path": "README.md",
+      "sha256": "10e8144765fad0c61a3aa0048c37b6dec74da7f32a762f8eca8455bd9d5057c6"
+    },
+    {
+      "path": "export_flat.py",
+      "sha256": "4595682fcda8be416eac3636bcf0c10ea6a5f4145c46c1390610e32a0b59e1c5"
+    },
+    {
+      "path": "import_flat.py",
+      "sha256": "446db474cad5e2fc52e6b640726cbe379c041ca2226999c1372efa7d64dabb94"
+    },
+    {
+      "path": "verify.py",
+      "sha256": "c73f181b6301a0579aa9357a484353f770bd5ea89fb2b343bd33cf7e190807db"
+    },
+    {
+      "path": "export-receipt.json",
+      "sha256": "0019016424d620d29e165dc52f69f348bab40998d466570c6c5bdd7fcb00b707"
+    },
+    {
+      "path": "import-receipt.json",
+      "sha256": "e07379cec4ae6d40e9d447716cb441ce963080c874c970f1939ba1f2ffcbf603"
+    },
+    {
+      "path": "upstream-config.json",
+      "sha256": "49b70739d2e8b4206fabf8b089f88337db73f8edaccb93e64b0836694ef10a03"
+    },
+    {
+      "path": "stable-manifest.json",
+      "sha256": "66d654ffe39ffba0b7520f4cacfa74ce0f5ea89522a5b8cd870b7bdf3d034484"
+    },
+    {
+      "path": "pull.log",
+      "sha256": "e711f2e0368f9293dd6f6da1d3efdbf48f48993b41404a9367513a0d2509a7c8"
+    },
+    {
+      "path": "pull-stable.log",
+      "sha256": "c987a8e4b504f815dafbb35db44e7ec9643bebd6e15a996eb4ab446ad33f9200"
+    },
+    {
+      "path": "version.stdout",
+      "sha256": "7711e61e5d5a699b49a4b42172fb911db6e3976ebe29eea52280528bb7b67c79"
+    },
+    {
+      "path": "version.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "help.stdout",
+      "sha256": "93ec7be620531dbce5db5ec4dfd3b1bad3638258a82c3e52e63db7458d69f811"
+    },
+    {
+      "path": "help.stderr",
+      "sha256": "c892eacaa98635a9573d4819819cb891f703d070e5cfd611d25caa8aa6c09665"
+    },
+    {
+      "path": "rootfs.sha256",
+      "sha256": "81c22bd49fe57b6f55b3e7a03d60b063d329f1d4f4a235f3f137de29d93708ef"
+    }
+  ]
+}

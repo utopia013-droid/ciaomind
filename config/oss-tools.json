@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-10-24",
+  "execution_mode": "local_offline",
+  "model_api_required": false,
+  "tools": [
+    {
+      "id": "markitdown",
+      "version": "0.1.9",
+      "operation": "document_markdown",
+      "repository": "https://github.com/microsoft/markitdown",
+      "license": "MIT",
+      "license_url": "https://github.com/microsoft/markitdown/blob/main/LICENSE",
+      "reference": "https://github.com/microsoft/markitdown/blob/main/README.md",
+      "scope": "Local document streams to Markdown; no plugins, LLM client or cloud endpoints"
+    },
+    {
+      "id": "trafilatura",
+      "version": "2.3.1",
+      "operation": "html_text",
+      "repository": "https://github.com/adbar/trafilatura",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/adbar/trafilatura/blob/master/LICENSE",
+      "reference": "https://github.com/adbar/trafilatura/blob/master/docs/usage-python.rst",
+      "scope": "Extract article text from an already downloaded HTML file; no fetch or crawl"
+    },
+    {
+      "id": "duckdb",
+      "version": "2.0.0",
+      "operation": "csv_profile",
+      "repository": "https://github.com/duckdb/duckdb",
+      "license": "MIT",
+      "license_url": "https://github.com/duckdb/duckdb/blob/main/LICENSE",
+      "reference": "https://github.com/duckdb/duckdb/blob/main/README.md",
+      "scope": "Fixed local CSV profiling in memory; no user SQL, extensions or remote sources"
+    }
+  ]
+}

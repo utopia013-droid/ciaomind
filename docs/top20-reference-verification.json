@@ -1,0 +1,46 @@
+{
+  "verified_on": "2026-10-24",
+  "projects_evaluated": 20,
+  "source_snapshots_verified": 20,
+  "searchable_reference_snapshots": 16,
+  "link_only": 4,
+  "catalog_queries": [
+    {
+      "query": "database",
+      "matches": 3,
+      "checked_snapshots": 16,
+      "source_repositories": [
+        "sindresorhus/awesome"
+      ],
+      "citations_include_commit_and_line": true
+    },
+    {
+      "query": "systematic",
+      "matches": 50,
+      "checked_snapshots": 16,
+      "source_repositories": [
+        "affaan-m/ECC",
+        "awesome-selfhosted/awesome-selfhosted",
+        "mattpocock/skills",
+        "obra/superpowers"
+      ],
+      "citations_include_commit_and_line": true
+    },
+    {
+      "query": "handoff",
+      "matches": 50,
+      "checked_snapshots": 16,
+      "source_repositories": [
+        "affaan-m/ECC",
+        "mattpocock/skills",
+        "morluto/rea",
+        "obra/superpowers"
+      ],
+      "citations_include_commit_and_line": true
+    }
+  ],
+  "mirror_reproduction": "fresh pinned snapshot created for practical-tutorials/project-based-learning; existing20 HEAD verified",
+  "coverage": "Sparse root README and selected books/skills/agents directories; not all repository content",
+  "global_skill_hooks_enabled": false,
+  "source_download_is_runtime_installation": false
+}
