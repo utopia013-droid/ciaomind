@@ -10,6 +10,8 @@
 
 2026-10-24 已读取官方 README 与 LICENSE；来源与版本保存在 `config/oss-tools.json`，依赖及传递依赖保存在 `uv.lock`。只依赖正式软件包，不复制上游源码。上游文档中提到的云端、图片描述、OCR、语音及抓取能力不代表本适配器启用了它们。
 
+Trafilatura许可按本次实际安装版本核对：2.3.1的包metadata明确`Apache-2.0`，其wheel自带LICENSE同为Apache2.0；官方README说明1.8.0之前版本才是GPLv3+。不能把旧版许可套用到此版本。本仓未复制第三方实现源码或混入旧GPL版本；将来复制或分发软件包时仍需保留各上游许可与适用NOTICE。MarkItDown和DuckDB本次顶层包均为MIT。
+
 ## 安装和运行
 
 需要 Python 3.12+ 与 [uv](https://docs.astral.sh/uv/)。在仓库根目录运行：

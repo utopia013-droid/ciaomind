@@ -52,6 +52,22 @@ python scripts/rea_worker.py run --input examples/rea/input.json --output /tmp/c
 
 ## 本次验证
 
+一次实际端到端回执的关键字段如下，来自合成项目的原始工具输入。该输入原字节SHA256与源树指纹均已复算；仓库中的示例输入可重新运行，但因路径/排版字节不同，重跑必须计算新指纹，不能沿用此处值。
+
+```json
+{
+  "task_id": "CIAO-REA-SYNTHETIC-001",
+  "input_version": 1,
+  "input_sha256": "91ed797282a10c52e8f06c59204c29f51783ab532f3cc7404a04d27fd73ff339",
+  "operation": "javascript_static",
+  "tool_name": "rea-agents",
+  "tool_version": "6.7.0",
+  "source_tree_sha256": "6213cda4de05cb0d0a59c35c76ff69ff61b051ff8bd5d546709a26cd30e627af",
+  "status": "completed",
+  "coverage": {"status": "complete", "truncated": false, "omitted_count": 0}
+}
+```
+
 - 合成项目：3文件、649字节，解析2个JS，失败0，覆盖complete；目标写文件和throw没有执行，输入/源树/产物指纹已回算。
 - 真实CIAOMIND官网：[固定源码版本](https://github.com/utopia013-droid/ciaomind-website/tree/6a1d6e1c11ddd1d8fee09afbf15e2d0435c48b98)共选取52文件、95,086字节，解析51个JS/TS、失败0。因REA结果预算限制，关系图只获得partial覆盖；[回执摘要](website-rea-verification.json)保留遗漏与资源限制，未修改官网或部署。
 - Windows桌面领取、后台同步、完整业务还原与其他REA provider仍待各自实测。
