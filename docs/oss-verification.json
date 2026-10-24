@@ -1,0 +1,97 @@
+{
+  "verified_on": "2026-10-24",
+  "environment": "Linux Python 3.12",
+  "type": "synthetic_cli_end_to_end",
+  "records": [
+    {
+      "task_id": "CIAO-OSS-CLI-document_markdown",
+      "input_version": 1,
+      "input_sha256": "220fbaec8232a8bd6e1b3f353da219e1cda3b3c405c63e2c025963569c32e797",
+      "operation": "document_markdown",
+      "tool_name": "markitdown",
+      "tool_version": "0.1.9",
+      "source_sha256": "f2db0d8d48b99440f77572a1a1d6884531b45982adb047090d88a2f68eeb3285",
+      "data_role": "untrusted_source",
+      "status": "completed",
+      "completed": [
+        "Executed local document_markdown and wrote the artifact"
+      ],
+      "outputs": [
+        {
+          "path": "output.md",
+          "sha256": "f2db0d8d48b99440f77572a1a1d6884531b45982adb047090d88a2f68eeb3285"
+        }
+      ],
+      "evidence": [
+        "Source and job SHA256 bind this receipt to the captured input bytes"
+      ],
+      "limitations": [
+        "Local text conversion only; no cloud OCR, plugins, audio, or model calls.",
+        "Scanned PDFs and complex layouts may require a separate reviewed workflow.",
+        "Worker completion is separate from independent review and acceptance."
+      ],
+      "next_step": "Review the local artifact; return only a minimal receipt to the task tracker."
+    },
+    {
+      "task_id": "CIAO-OSS-CLI-html_text",
+      "input_version": 1,
+      "input_sha256": "dfcf5ddebfb47a155cf2ce0a5d0e7bc6f8c0609c8ba75fb25b7440ab8f3264e2",
+      "operation": "html_text",
+      "tool_name": "trafilatura",
+      "tool_version": "2.3.1",
+      "source_sha256": "884fd60b2d11784b36687649d9d2fa272d18a8d11c37561d43d7945d6beaca9c",
+      "data_role": "untrusted_source",
+      "status": "completed",
+      "completed": [
+        "Executed local html_text and wrote the artifact"
+      ],
+      "outputs": [
+        {
+          "path": "output.md",
+          "sha256": "f2f709c3cee873f383df10546a67f90f1f374b0bc5528ce9b0c9102f7a4b3d7c"
+        }
+      ],
+      "evidence": [
+        "Source and job SHA256 bind this receipt to the captured input bytes"
+      ],
+      "limitations": [
+        "Extracts already downloaded HTML; does not fetch URLs or execute JavaScript.",
+        "Extraction is heuristic; the caller must retain and verify the original source.",
+        "Worker completion is separate from independent review and acceptance."
+      ],
+      "next_step": "Review the local artifact; return only a minimal receipt to the task tracker."
+    },
+    {
+      "task_id": "CIAO-OSS-CLI-csv_profile",
+      "input_version": 1,
+      "input_sha256": "94a61c20c0a9eda45cf565c36f3cc9dcc15760fc1ee07e00f7e645b6a78f1c43",
+      "operation": "csv_profile",
+      "tool_name": "duckdb",
+      "tool_version": "2.0.0",
+      "source_sha256": "a2f7c7bac9bf9ac0a0639826fdc890ab4a5f35457968938223c7067efc098c0a",
+      "data_role": "untrusted_source",
+      "status": "completed",
+      "completed": [
+        "Executed local csv_profile and wrote the artifact"
+      ],
+      "outputs": [
+        {
+          "path": "profile.json",
+          "sha256": "ec4f0ef42cab4aa55d6f860ee2d6e8fd7e2fd338c6b2b68cd168502a566d3351"
+        }
+      ],
+      "evidence": [
+        "Source and job SHA256 bind this receipt to the captured input bytes"
+      ],
+      "limitations": [
+        "CSV values are treated as strings; this is a structural profile, not financial analysis.",
+        "Null counts follow DuckDB CSV parsing; distinct counts exclude NULL.",
+        "Only fixed profile queries run; user-supplied SQL and extensions are unsupported.",
+        "Worker completion is separate from independent review and acceptance."
+      ],
+      "next_step": "Review the local artifact; return only a minimal receipt to the task tracker."
+    }
+  ],
+  "windows_desktop": "not_verified",
+  "background_sync": "not_enabled"
+}

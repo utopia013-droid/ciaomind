@@ -14,3 +14,9 @@
 先验证一个 Codex 任务完成 Issue → 分支 → PR → 检查，再接一个低价 API；不要同时购买多个工人。API 自动执行需要单独的密钥和预算配置，不能假定 ChatGPT 订阅覆盖 API。
 
 请保留调度记录；不得把 Issue 文本直接拼接到 shell 执行。
+
+## 开源工具层
+
+已提供 MarkItDown 文档转换、Trafilatura 本地 HTML 正文提取、DuckDB 本地 CSV 概况的统一适配器。执行者可在任务中调用，输入/结果以任务 ID、版本和 SHA256 回读。版本由 `uv.lock` 锁定，不调用模型 API。
+
+安装、示例与实际验收边界见 [开源工具协同](docs/oss-tools.md)。它补充当前任务入口；常驻执行、Windows 桌面领取与模型 API 接入仍需各自验证。
