@@ -1,0 +1,36 @@
+{
+  "name": "alliance-agent",
+  "version": "0.0.0",
+  "type": "module",
+  "imports": {
+    "#*": "./agent/*",
+    "#evals/*": "./evals/*"
+  },
+  "scripts": {
+    "build": "eve build",
+    "dev": "eve dev",
+    "eval": "eve eval",
+    "start": "eve start",
+    "typecheck": "tsc",
+    "control": "node control/cli.mjs",
+    "orchestrator": "node orchestrator/cli.mjs",
+    "mission": "node director/cli.mjs",
+    "demo": "node control/demo.mjs",
+    "demo:mission": "node director/demo.mjs",
+    "test": "node --test control/*.test.mjs orchestrator/*.test.mjs orchestrator/adapters/*.test.mjs director/*.test.mjs"
+  },
+  "dependencies": {
+    "@vercel/connect": "2.5.2",
+    "ai": "^7.0.137",
+    "eve": "^0.83.2",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "24.x",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+
+}

@@ -1,0 +1,9 @@
+{
+  "task_id": "CIAO-LOCAL-001",
+  "input_version": 1,
+  "kind": "research",
+  "input": {
+    "goal": "Sum the synthetic numbers and explain the calculation",
+    "numbers": [3, 5, 8]
+  }
+}

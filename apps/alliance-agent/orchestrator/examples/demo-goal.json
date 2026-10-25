@@ -1,0 +1,32 @@
+{
+  "goal_id": "demo-continuous-goal",
+  "namespace": "project",
+  "objective": "Verify automatic local task progression and independent-role review with synthetic numbers.",
+  "acceptance": [
+    "Both dependency-ordered steps have verifiable sums and a distinct demo reviewer accepts them."
+  ],
+  "grants": ["demo.compute", "review"],
+  "max_calls": 8,
+  "max_attempts": 2,
+  "revisit_seconds": 0,
+  "steps": [
+    {
+      "step_id": "first-sum",
+      "kind": "research",
+      "worker": "demo-worker",
+      "reviewer": "demo-reviewer",
+      "capability": "demo.compute",
+      "input": { "operation": "sum", "values": [3, 5, 8] },
+      "depends_on": []
+    },
+    {
+      "step_id": "second-sum",
+      "kind": "research",
+      "worker": "demo-worker",
+      "reviewer": "demo-reviewer",
+      "capability": "demo.compute",
+      "input": { "operation": "sum", "values": [8, 3, 5, 3, -2] },
+      "depends_on": ["first-sum"]
+    }
+  ]
+}

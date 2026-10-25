@@ -1,0 +1,23 @@
+# User service template only. Replace absolute paths before installation.
+# Do not point a standalone goals daemon at this director's mission-goals.sqlite.
+[Unit]
+Description=CIAOMIND persistent mission director
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/ABSOLUTE/PATH/TO/ciaomind/apps/alliance-agent
+ExecStart=/ABSOLUTE/PATH/TO/node /ABSOLUTE/PATH/TO/ciaomind/apps/alliance-agent/director/cli.mjs run
+Environment=CIAOMIND_DATA_DIR=%h/.local/share/ciaomind
+Environment=CIAOMIND_CONFIG=%h/.config/ciaomind/workers.json
+# Official authentication and explicit worker enablement are separate setup steps.
+# Add Environment=CIAOMIND_ENABLE_WORKERS=1 only after reviewing that configuration.
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
