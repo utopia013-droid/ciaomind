@@ -61,6 +61,7 @@ function fakeCLI(directory) {
         "if (args[0] === 'login') { process.stderr.write(process.env.TEST_AUTH === 'api' ? 'Logged in using an API key - private-test-secret' : 'Logged in using ChatGPT - private-test-secret'); process.exit(0); }",
         "const raw = fs.readFileSync(0, 'utf8');",
         "if (process.env.TEST_MODE === 'auth-failed') { process.stderr.write('HTTP 401 invalid_token private-test-secret'); process.exit(1); }",
+        "if (process.env.TEST_PROVIDER_FAILURE) { process.stderr.write(process.env.TEST_PROVIDER_FAILURE); process.exit(1); }",
         "if (process.env.TEST_ARGS_FILE) fs.writeFileSync(process.env.TEST_ARGS_FILE, JSON.stringify({args,raw}));",
         "const start = raw.lastIndexOf('TASK PACKET:\\n\\n') + 'TASK PACKET:\\n\\n'.length;",
         "const finish = raw.indexOf('\\n\\nRESPONSE JSON SCHEMA:', start);",
@@ -381,6 +382,7 @@ test("provider failures expose only safe diagnostic categories and retain starte
   });
   await assert.rejects(worker.run(p), (error) => {
     assert.equal(error.code, "AUTH_REQUIRED");
+    assert.equal(error.retryable, false);
     assert.equal(error.notStarted, false);
     assert.deepEqual(error.diagnostic, {
       provider: "codex",
@@ -391,6 +393,96 @@ test("provider failures expose only safe diagnostic categories and retain starte
     assert(!error.message.includes("private-test-secret"));
     return true;
   });
+});
+
+const ACCOUNT_IDENTITY_REFRESH_FAILURE =
+  "Your access token could not be refreshed because you have since logged out or signed in to another account. Please sign in again.";
+
+function codexFailureWorker(t, failure) {
+  const directory = temp(t);
+  return createCodexWorker(
+    {
+      id: "codex",
+      enabled: true,
+      binary: fakeCLI(directory),
+      workdir: directory,
+    },
+    {
+      env: {
+        ...process.env,
+        CIAOMIND_ENABLE_WORKERS: "1",
+        TEST_PROVIDER_FAILURE: failure,
+      },
+    },
+  );
+}
+
+const codexFailurePacket = () =>
+  packet("codex", {
+    capability: "repo.read",
+    grant: { namespace: "project", capability: "repo.read" },
+  });
+
+test("Codex account identity refresh failure is terminal without an HTTP status", async (t) => {
+  const worker = codexFailureWorker(t, ACCOUNT_IDENTITY_REFRESH_FAILURE);
+  await assert.rejects(worker.run(codexFailurePacket()), (error) => {
+    assert.equal(error.code, "AUTH_REQUIRED");
+    assert.equal(error.retryable, false);
+    assert.equal(error.notStarted, false);
+    assert.deepEqual(error.diagnostic, {
+      provider: "codex",
+      http_status: null,
+      error_code: "unclassified",
+      auth_failure_reason: "account_identity_mismatch",
+      recovery_action: "sign_in_again",
+    });
+    assert.match(error.message, /official Codex login flow on the worker host/);
+    assert(!error.message.includes(ACCOUNT_IDENTITY_REFRESH_FAILURE));
+    return true;
+  });
+});
+
+test("Codex identity recovery preserves the upstream 401 category and redacts raw secrets", async (t) => {
+  const worker = codexFailureWorker(
+    t,
+    `HTTP 401 Unauthorized: ${ACCOUNT_IDENTITY_REFRESH_FAILURE} private-test-secret`,
+  );
+  await assert.rejects(worker.run(codexFailurePacket()), (error) => {
+    assert.equal(error.code, "AUTH_REQUIRED");
+    assert.equal(error.retryable, false);
+    assert.deepEqual(error.diagnostic, {
+      provider: "codex",
+      http_status: 401,
+      error_code: "unauthorized",
+      auth_failure_reason: "account_identity_mismatch",
+      recovery_action: "sign_in_again",
+    });
+    assert(!JSON.stringify(error).includes("private-test-secret"));
+    assert(!error.message.includes("private-test-secret"));
+    assert(!error.message.includes(ACCOUNT_IDENTITY_REFRESH_FAILURE));
+    return true;
+  });
+});
+
+test("explicit expired or invalidated refresh-token codes require sign-in without automatic retry", async (t) => {
+  for (const code of ["refresh_token_expired", "refresh_token_invalidated"]) {
+    const worker = codexFailureWorker(t, `${code} private-test-secret`);
+    await assert.rejects(worker.run(codexFailurePacket()), (error) => {
+      assert.equal(error.code, "AUTH_REQUIRED");
+      assert.equal(error.retryable, false);
+      assert.equal(error.notStarted, false);
+      assert.deepEqual(error.diagnostic, {
+        provider: "codex",
+        http_status: null,
+        error_code: code,
+        recovery_action: "sign_in_again",
+      });
+      assert.match(error.message, /official Codex login flow on the worker host/);
+      assert(!JSON.stringify(error).includes("private-test-secret"));
+      assert(!error.message.includes("private-test-secret"));
+      return true;
+    });
+  }
 });
 
 test("demo mission planning review has distinct phase identity and mission evaluation checks real child evidence", async () => {

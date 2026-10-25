@@ -102,6 +102,10 @@ node orchestrator/cli.mjs --config "$CIAOMIND_CONFIG" run --namespace project
 
 本次已观察到的认证边界：Codex CLI 0.163.0 的 login metadata 显示 ChatGPT 登录，但最小真实只读探针返回 HTTP 401 / `AUTH_REQUIRED`。因此本次不能标为 Codex 已接通，也没有用新登录、付费 key 或其他厂家代替成功。Gemini 尚无真实安装与认证回执。修复后需重新拿到实际任务、结果与独立验收证据。
 
+若诊断带有 `auth_failure_reason: account_identity_mismatch` 和 `recovery_action: sign_in_again`，表示本地 CLI 无法确认一致的账号身份，可能是身份缺失或重新载入后不一致，不证明用户实际切换过账号。这是本地恢复分类，不是新的上游错误码。真实 HTTP 状态未知时保留 `null`。
+
+此类错误应保持 `AUTH_REQUIRED` 阻塞，先在实际工人节点通过官方 Codex 登录流程恢复一致会话；平台注入的认证应由原宿主重新连接，不手工覆盖托管凭据文件。账号持有人在官方页面完成必要确认，不经聊天、Issue 或 PR 传送认证材料。仅执行 `login status`、`doctor` 或 `account/read(refreshToken:true)` 成功仍不足以解除阻塞：恢复后先完成一次最小只读推理与独立验收，再恢复原任务，避免重复已完成的步骤。当前实现不会自动开始登录、购买额度或切换 API-key 计费。
+
 ## 常驻、退出与重启
 
 不加 `--max-ticks` 的 `run` 按配置的 `poll_interval_ms` 连续检查；同一个进程不会重叠启动两次 tick。日志只输出计数与错误数量，具体任务内容留在私有状态库。缺连接的目标应进入可见阻塞，其他无依赖目标仍可推进。

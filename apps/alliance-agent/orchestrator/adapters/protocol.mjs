@@ -12,14 +12,17 @@ export function preflight(code, message) {
   return new WorkerError(code, message, { notStarted: true });
 }
 
-// Only known public error codes/statuses leave the process boundary. Never expose
-// arbitrary CLI stderr, prompts, environment values, tokens, or request bodies.
+// Only known public error codes/statuses and fixed local recovery categories
+// leave the process boundary. Never expose arbitrary CLI stderr, prompts,
+// environment values, tokens, or request bodies.
 export function safeFailureDiagnostic(text, provider) {
   const known = [
+    "refresh_token_invalidated",
+    "refresh_token_expired",
+    "refresh_token_reused",
     "invalid_api_key",
     "invalid_token",
     "token_expired",
-    "refresh_token_reused",
     "unauthorized",
     "authentication_error",
     "account_deactivated",
@@ -34,11 +37,33 @@ export function safeFailureDiagnostic(text, provider) {
   );
   const lowered = text.toLowerCase();
   const code = known.find((value) => lowered.includes(value)) ?? "unclassified";
-  return {
+  const diagnostic = {
     provider,
     http_status: statusMatch ? Number(statusMatch[1]) : null,
     error_code: code,
   };
+  // This is a local CLI recovery failure, not an upstream API error code.
+  // It can mean absent or mismatched account identity; it does not prove that
+  // the user actually logged out or changed accounts.
+  if (
+    provider === "codex" &&
+    lowered.includes(
+      "your access token could not be refreshed because you have since logged out or signed in to another account. please sign in again.",
+    )
+  ) {
+    diagnostic.auth_failure_reason = "account_identity_mismatch";
+    diagnostic.recovery_action = "sign_in_again";
+  } else if (
+    provider === "codex" &&
+    [
+      "refresh_token_invalidated",
+      "refresh_token_expired",
+      "refresh_token_reused",
+    ].includes(code)
+  ) {
+    diagnostic.recovery_action = "sign_in_again";
+  }
+  return diagnostic;
 }
 
 export const IDENTITY_FIELDS = Object.freeze([

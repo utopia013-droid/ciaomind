@@ -165,15 +165,22 @@ export function createCodexWorker(options = {}, { env = process.env } = {}) {
               "invalid_api_key",
               "invalid_token",
               "token_expired",
+              "refresh_token_invalidated",
+              "refresh_token_expired",
               "refresh_token_reused",
               "unauthorized",
               "authentication_error",
               "account_deactivated",
             ].includes(diagnostic.error_code) ||
+            diagnostic.auth_failure_reason === "account_identity_mismatch" ||
             /not logged in|login required|please sign in/i.test(text);
+          const recovery =
+            diagnostic.recovery_action === "sign_in_again"
+              ? " Sign in again using the official Codex login flow on the worker host before retrying."
+              : "";
           const error = new WorkerError(
             authError ? "AUTH_REQUIRED" : "WORKER_FAILED",
-            `Codex exited without a valid result (exit ${result.code}; HTTP ${diagnostic.http_status ?? "unknown"}; ${diagnostic.error_code})`,
+            `Codex exited without a valid result (exit ${result.code}; HTTP ${diagnostic.http_status ?? "unknown"}; ${diagnostic.error_code}).${recovery}`,
             { retryable: !authError },
           );
           error.diagnostic = diagnostic;

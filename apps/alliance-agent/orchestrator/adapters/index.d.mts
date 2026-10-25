@@ -81,6 +81,8 @@ export class WorkerError extends Error {
     provider: string;
     http_status: number | null;
     error_code: string;
+    auth_failure_reason?: "account_identity_mismatch";
+    recovery_action?: "sign_in_again";
   };
   constructor(
     code: string,
