@@ -1,0 +1,18 @@
+{
+  "protocol": "ciaomind.desktop-continuity.v1",
+  "task_id": "CODEX-DESKTOP-CONTINUITY-20261025-001",
+  "source_commit": "4a0942a9d3d7130aad2a3da52fad965f6f4e1623",
+  "prior_task_id": "CODEX-DESKTOP-AUTH-20261025-001",
+  "prior_input_sha256": "2e6c298f9d143690c76d0462d90470959e53cd659d42301cd438fef154720923",
+  "prior_task_packet_commit": "b76555c79d5f0917057285260e7ce95f7e701722",
+  "budget": {"additional_remote_adapter_invocations": 0, "max_local_processes": 40},
+  "mode": "synthetic-local-no-model",
+  "acceptance": [
+    "Validate the supplied sanitized prior receipt against the pinned task identity, without treating it as a new authentication test.",
+    "Persist a demo mission, advance planning, and resume from fresh CLI processes.",
+    "Pause prevents further local reservations; resume completes the demo mission.",
+    "An extra tick after completion does not reserve or repeat work.",
+    "Cancellation before dispatch prevents local reservations.",
+    "Only explicit demo workers are configured; no live adapter, service or cron is enabled."
+  ]
+}
