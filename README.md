@@ -1,19 +1,19 @@
 # CIAOMIND AI 任务调度台
 
-状态：任务入口可用；新增联盟协作代理的本地任务底座，真实模型自动执行尚未接通。
+状态：任务入口及本地长期目标总控已实现；真实厂商连接与常驻部署以验证记录为准。
 
 ## 自建联盟协作代理
 
-依据 Dots 公开能力独立实现，开发记录见 [Issue #6](https://github.com/utopia013-droid/ciaomind/issues/6)。第一版提供任务持久化、确定性分派、JSON 文件交接、结果指纹核对和独立角色验收；不依赖 Dots 账号资格。
+依据公开能力独立实现，开发记录见 [Issue #6](https://github.com/utopia013-droid/ciaomind/issues/6)。长期目标层自动生成受限计划、独立审查、调度子任务，再对照原目标验收或重规划；执行层保存状态、调用预约、租约与审计。无需 Dots 账号资格。
 
 Node.js 24+ 可直接运行离线合成演示，无需安装依赖或配置模型：
 
 ```bash
 cd apps/alliance-agent
-node control/demo.mjs
+node director/demo.mjs
 ```
 
-演示不调用真实工人。使用说明见 [代理 README](apps/alliance-agent/README.md)，设计及三阶段路线见 [开发路线](docs/alliance-agent/ROADMAP.md)。原有 Issue 打包工作流继续可用。
+演示明确使用本地 demo 工人，不调用外部模型。使用说明见 [代理 README](apps/alliance-agent/README.md)，运行方式见 [运维说明](docs/alliance-agent/OPERATIONS.md)，实际验收见 [验证记录](docs/alliance-agent/VERIFICATION.md)。原有 Issue 打包和文件任务交接继续可用。
 
 ## 使用
 1. Issues → New issue → AI任务，填写目标与验收条件。公开仓库禁止填写客户资料、财务、家庭信息、密码或密钥。

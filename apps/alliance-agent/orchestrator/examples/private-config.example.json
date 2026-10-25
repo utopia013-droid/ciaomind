@@ -1,0 +1,44 @@
+{
+  "poll_interval_ms": 5000,
+  "shutdown_timeout_ms": 15000,
+  "workers": [
+    {
+      "id": "demo-worker",
+      "type": "demo",
+      "role": "worker",
+      "namespaces": ["project"],
+      "enabled": true
+    },
+    {
+      "id": "demo-reviewer",
+      "type": "demo",
+      "role": "reviewer",
+      "namespaces": ["project"],
+      "enabled": true
+    },
+    {
+      "id": "codex-worker",
+      "type": "codex",
+      "role": "worker",
+      "namespaces": ["project"],
+      "enabled": false,
+      "workdir": "/ABSOLUTE/PATH/TO/AUTHORIZED/REPOSITORY",
+      "binary": "codex",
+      "timeoutMs": 120000,
+      "maxOutputBytes": 500000,
+      "allowApiKey": false
+    },
+    {
+      "id": "gemini-reviewer",
+      "type": "gemini",
+      "role": "reviewer",
+      "namespaces": ["project"],
+      "enabled": false,
+      "workdir": "/ABSOLUTE/PATH/TO/AUTHORIZED/REPOSITORY",
+      "binary": "gemini",
+      "timeoutMs": 120000,
+      "maxOutputBytes": 500000,
+      "reviewedConfig": false
+    }
+  ]
+}

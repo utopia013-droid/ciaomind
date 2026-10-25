@@ -1,0 +1,17 @@
+{
+  "mission_id": "DEMO-MISSION-001",
+  "namespace": "project",
+  "mode": "demo",
+  "objective": "Run a synthetic demonstration of automatic planning, computing 3 + 5 + 8 and independent acceptance. This is not a real-world AI objective.",
+  "acceptance": [
+    "The synthetic numbers total 16",
+    "An independent demo reviewer verifies the result"
+  ],
+  "grants": ["demo.plan", "demo.compute", "review"],
+  "planner": "demo-worker",
+  "reviewer": "demo-reviewer",
+  "allowed_workers": ["demo-worker", "demo-reviewer"],
+  "max_calls": 10,
+  "max_cycles": 2,
+  "revisit_seconds": 0
+}

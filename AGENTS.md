@@ -6,4 +6,4 @@
 - Do not automatically merge, publish, purchase subscriptions or invoke paid APIs.
 - Report workers as configured only after an authenticated end-to-end task succeeds.
 - Keep orchestration independent of provider adapters.
-- New agent runtime implementation should follow current official documentation; no runtime is installed yet.
+- Runtime implementation follows installed eve documentation in apps/alliance-agent/node_modules/eve/docs and current official worker interfaces. Keep private state outside Git; demo workers never prove vendor connectivity.

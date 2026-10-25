@@ -1,0 +1,24 @@
+[Unit]
+Description=CIAOMIND private goal coordinator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Copy to ~/.config/systemd/user/ciaomind-goals.service and replace all paths.
+# This template has not been installed, enabled or started automatically.
+WorkingDirectory=/ABSOLUTE/PATH/TO/ciaomind/apps/alliance-agent
+ExecStart=/ABSOLUTE/PATH/TO/node orchestrator/cli.mjs --config /ABSOLUTE/PRIVATE/PATH/worker-config.json run
+Environment=CIAOMIND_DATA_DIR=/ABSOLUTE/PRIVATE/PATH/data
+# Enabling this permits configured real adapters to attempt authorized calls.
+# Set only after verifying account permissions and call budgets.
+# Environment=CIAOMIND_ENABLE_WORKERS=1
+UMask=0077
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
