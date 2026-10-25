@@ -1,0 +1,93 @@
+{
+  "protocol": "ciaomind.desktop-auth-check.v1",
+  "task_id": "CODEX-DESKTOP-AUTH-20261025-001",
+  "input_version": 1,
+  "objective": "Verify that an existing, normally working desktop Codex login can run a bounded official Codex worker and a separate review invocation, without transferring credentials.",
+  "source_repository": "utopia013-droid/ciaomind",
+  "source_commit": "4a0942a9d3d7130aad2a3da52fad965f6f4e1623",
+  "source_directory": "apps/alliance-agent",
+  "runtime": {
+    "node_major_minimum": 24,
+    "official_native_codex_binary_required": true
+  },
+  "budget": {
+    "max_adapter_invocations": 2,
+    "automatic_retries": 0,
+    "scope_note": "Counts adapter invocations, not vendor-internal model/tool calls or currency."
+  },
+  "synthetic_input": {
+    "operation": "sum",
+    "values": [
+      8,
+      3,
+      5,
+      3,
+      -2
+    ],
+    "expected_sum": 17
+  },
+  "authorization": {
+    "namespace": "project",
+    "capabilities": [
+      "reasoning",
+      "review"
+    ],
+    "allowed": [
+      "Read the pinned public source and official installation documentation.",
+      "Use existing official ChatGPT-plan login on the actual worker host.",
+      "Create isolated local task artifacts and use only synthetic input.",
+      "Locate an existing Node 24+ and official native Codex executable; if absent, install official portable/local packages only inside an already authorized task directory without administrator changes."
+    ],
+    "forbidden": [
+      "Do not sign out of or replace a working desktop session.",
+      "Do not manually read, copy, upload or rewrite credential files, tokens or verification codes; only the official client may use its own existing login.",
+      "Do not create accounts, keys, new access grants, subscriptions or paid API connections.",
+      "Do not enable API-key mode, override model selection, weaken sandbox/config guards, start services or alter cron.",
+      "Do not use private documents, personal project goals or account exports as test inputs.",
+      "Do not bypass prerequisites or report a demo as authenticated inference."
+    ]
+  },
+  "execution": [
+    "Read the pinned source repository AGENTS.md and this task README before executing.",
+    "Inspect the input UTF-8 bytes, compute SHA-256, and retain the task identity for the real desktop receipt.",
+    "Inspect the supplied probe and module fingerprint manifest, use a separate checkout at source_commit, and verify executable module hashes.",
+    "Run the live probe once with the existing official native Codex binary and a fresh private output path. Stop after any preflight or first invocation failure. Do not run the synthetic mode as a substitute.",
+    "Producer computes sum 17; a different Codex worker ID independently reviews it. Both use the same provider; this does not prove cross-vendor independence.",
+    "Return a sanitized actual desktop receipt with the exact task identity, read source version, stages, exit code and limited evidence. Do not fabricate a desktop receipt from a cloud/demonstration runtime."
+  ],
+  "acceptance": [
+    "Actual producer and reviewer invocations both returned valid protocol identities, the sum was deterministically checked as 17, and the reviewer accepted.",
+    "No new login, key, paid API, broader permissions or credential transfer was used.",
+    "Blocked results identify the actual stage: prerequisites/configuration/authentication/inference/review, and retain fixed diagnostic categories only.",
+    "Remote authentication is true only after successful real official Codex inference, never because the desktop app opened or login metadata exists."
+  ],
+  "required_receipt_fields": [
+    "task_id",
+    "input_version",
+    "input_sha256",
+    "consumer_type",
+    "source_commit",
+    "task_packet_commit",
+    "node_version",
+    "platform",
+    "native_codex_version",
+    "mode",
+    "status",
+    "remote_vendor_authenticated",
+    "max_adapter_invocations",
+    "actual_adapter_invocations",
+    "exit_code",
+    "completed_stages",
+    "blocked_stages",
+    "safe_diagnostic",
+    "evidence",
+    "limitations"
+  ],
+  "receipt_policy": {
+    "desktop_consumer_type": "desktop_codex",
+    "private_output_required": true,
+    "publish_only_sanitized_receipt": true,
+    "cloud_agent_must_not_emit_desktop_ack": true,
+    "if_reply_channel_unavailable": "Display the sanitized receipt in the actual desktop conversation; do not obtain new account/repository permissions."
+  }
+}
