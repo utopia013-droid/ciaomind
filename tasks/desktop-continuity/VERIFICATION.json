@@ -1,0 +1,41 @@
+{
+  "task_id": "CODEX-DESKTOP-CONTINUITY-20261025-001",
+  "mode": "synthetic-local-no-model",
+  "status": "passed",
+  "source_commit": "4a0942a9d3d7130aad2a3da52fad965f6f4e1623",
+  "input_sha256": "e6ebb8d92346a3b50187711901c467eae0c8b6c81a8079045af4621fb784b2ae",
+  "node_version": "24.13.1",
+  "platform": "win32",
+  "additional_remote_adapter_invocations": 0,
+  "remote_vendor_authenticated": false,
+  "prior_authentication_retested": false,
+  "checks": [
+    "pinned_source_clean",
+    "prior_receipt_consistency",
+    "pause_stops_reservations",
+    "fresh_process_resume_completed",
+    "reservation_budget_respected",
+    "completion_does_not_repeat_work",
+    "cancel_before_dispatch"
+  ],
+  "limitations": [
+    "Local demo continuation only; no live director mission or cross-vendor inference was tested.",
+    "Fresh process recovery does not establish crash recovery during an in-flight call, host reboot, VM replacement or 24/7 availability.",
+    "A prior receipt is an attestation checked for consistency, not independently verified provider proof."
+  ],
+  "prior_receipt_sha256": "fe266b62c520ed2f7f81a8b1ee2884c14cbf7da3d8519aa0fc566f1ba26613b8",
+  "synthetic_mission": {
+    "status": "completed",
+    "child_status": "completed",
+    "calls_reserved": 5,
+    "max_calls": 10
+  },
+  "local_cli_processes": 21,
+  "exit_code": 0,
+  "runner_sha256": "c5a20c743a66af7f33724f4a5ab7ec54a36465fe8be3edb8bf57935e2693038a",
+  "misuse_checks": {
+    "passed": 3,
+    "total": 3,
+    "exit_code": 0
+  }
+}
