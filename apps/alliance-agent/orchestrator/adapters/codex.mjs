@@ -5,9 +5,10 @@ import {
   statSync,
   rmSync,
   existsSync,
+  realpathSync,
 } from "node:fs";
-import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { homedir, tmpdir } from "node:os";
+import { dirname, isAbsolute, join } from "node:path";
 import {
   WorkerError,
   preflight,
@@ -21,6 +22,43 @@ import { findBinary, runProcess, workdirPath } from "./process.mjs";
 
 const SECURITY =
   "read-only Codex sandbox; user config and optional external tools disabled; managed policy and host read scope still require operator review";
+
+function ignoredGlobalConfigDirectory(env) {
+  let configuredHome = env.CODEX_HOME;
+  if (!configuredHome) {
+    // homedir() describes this Node process. A child with a different home
+    // environment may treat that same directory as project-local instead.
+    if (
+      ["HOME", "USERPROFILE", "HOMEDRIVE", "HOMEPATH"].some(
+        (name) => env[name] !== process.env[name],
+      )
+    )
+      return null;
+    configuredHome = join(homedir(), ".codex");
+  }
+  // A relative override can resolve differently for login status and exec.
+  // Do not exempt an ambiguous location from the project-config guard.
+  if (typeof configuredHome !== "string" || !isAbsolute(configuredHome))
+    return null;
+  try {
+    return realpathSync(configuredHome);
+  } catch {
+    return null;
+  }
+}
+
+function isIgnoredGlobalConfigDirectory(directory, globalDirectory) {
+  if (!globalDirectory) return false;
+  try {
+    // Codex excludes CODEX_HOME from project discovery after canonicalizing
+    // directories. Compare directories, not config-file targets: a project's
+    // config file may alias the global file and still be a project layer.
+    return realpathSync(directory) === globalDirectory;
+  } catch {
+    return false;
+  }
+}
+
 export function createCodexWorker(options = {}, { env = process.env } = {}) {
   const id = options.id ?? "codex";
   const adapter = {
@@ -101,8 +139,14 @@ export function createCodexWorker(options = {}, { env = process.env } = {}) {
         throw preflight(status.reason, `Codex is not ready: ${status.reason}`);
       const cwd = workdirPath(options.workdir);
       // Project-local config can add tools independently of the global config.
+      // The exact global directory is already excluded by --ignore-user-config.
+      const globalConfigDirectory = ignoredGlobalConfigDirectory(env);
       for (let directory = cwd; ; directory = dirname(directory)) {
-        if (existsSync(join(directory, ".codex", "config.toml")))
+        const configDirectory = join(directory, ".codex");
+        if (
+          existsSync(join(configDirectory, "config.toml")) &&
+          !isIgnoredGlobalConfigDirectory(configDirectory, globalConfigDirectory)
+        )
           throw preflight(
             "CONFIG_REVIEW_REQUIRED",
             "Project-local Codex config requires separate review before this bounded adapter can run",

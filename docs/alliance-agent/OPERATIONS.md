@@ -104,6 +104,8 @@ node orchestrator/cli.mjs --config "$CIAOMIND_CONFIG" run --namespace project
 
 若诊断带有 `auth_failure_reason: account_identity_mismatch` 和 `recovery_action: sign_in_again`，表示本地 CLI 无法确认一致的账号身份，可能是身份缺失或重新载入后不一致，不证明用户实际切换过账号。这是本地恢复分类，不是新的上游错误码。真实 HTTP 状态未知时保留 `null`。
 
+桌面临时工作目录可能位于用户主目录之下。适配器按官方配置发现语义，将规范化后的全局 `CODEX_HOME` 目录（默认 `~/.codex`）与项目配置区分：前者已由 `--ignore-user-config` 忽略，不再误报为项目配置；其他祖先中的项目配置仍须独立审查。仅项目配置文件与全局文件形成链接，不会获得豁免。此修复不改变登录、沙箱或模型授权。
+
 此类错误应保持 `AUTH_REQUIRED` 阻塞，先在实际工人节点通过官方 Codex 登录流程恢复一致会话；平台注入的认证应由原宿主重新连接，不手工覆盖托管凭据文件。账号持有人在官方页面完成必要确认，不经聊天、Issue 或 PR 传送认证材料。仅执行 `login status`、`doctor` 或 `account/read(refreshToken:true)` 成功仍不足以解除阻塞：恢复后先完成一次最小只读推理与独立验收，再恢复原任务，避免重复已完成的步骤。当前实现不会自动开始登录、购买额度或切换 API-key 计费。
 
 ## 常驻、退出与重启

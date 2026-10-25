@@ -6,7 +6,7 @@
 
 | 检查 | 实际结果 |
 |---|---|
-| `npm test` | **88/88 通过**：包含原文件交接、目标/DAG、mission 规划与重规划、租约并发、暂停/取消、预算预约、namespace、真实本地进程、CLI 重启与适配器 fixture；追加三个终止性授权诊断回归 |
+| `npm test` | **92/92 通过**：包含原文件交接、目标/DAG、mission 规划与重规划、租约并发、暂停/取消、预算预约、namespace、真实本地进程、CLI 重启与适配器 fixture；追加终止性授权诊断和全局配置边界回归 |
 | `npm run typecheck` | 通过 |
 | `npm run demo:mission` | 5 次自动 tick 达到 completed；计划阶段后关闭并重新打开数据库，接续成功 |
 | `npm run build` | Eve 构建通过；未调用模型 |
@@ -40,7 +40,9 @@
 
 适配器现将这条固定 CLI 消息额外分类为本地 `auth_failure_reason: account_identity_mismatch`，提示 `recovery_action: sign_in_again`，保留原 HTTP 状态和公开错误码。原日志没有 HTTP 码时仍为 `null`，不伪造成服务返回的 401。该错误仍为不可自动重试的 `AUTH_REQUIRED`；原实现已经阻止这条固定消息自动重试，本次补齐的是诊断分类与恢复提示，不能称为已经修复授权。
 
-另一运行环境已回传同版源码的独立接收校验、demo 成功及跨 CLI 进程恢复测试 2/2 通过；真实工人联调仍 blocked，跨 VM 替换恢复尚未验证。
+另一运行环境已对前一诊断版本 `4f98022` 回传 69/69 文件指纹一致、88 项测试及 demo 成功；真实工人联调仍 blocked，跨 VM 替换恢复尚未验证。
+
+桌面接入准备另发现全局配置误拦：当工作目录位于用户主目录内时，原先对所有祖先的检查会将标准全局配置误当成项目配置。现已按 [官方项目配置发现实现](https://github.com/openai/codex/blob/83086188ae0614bd882818ff1aa23f3194962012/codex-rs/config/src/loader/mod.rs#L1720)仅排除已被 `--ignore-user-config` 忽略的全局目录，保留其他项目配置检查。合成回归覆盖 Windows 风格的 home/AppData/Local/Temp 路径、非全局祖先拦截及项目文件硬链接不获豁免；这些是当前 Linux 环境中的测试，不等于 Windows 真机或桌面授权已验证。
 
 Gemini CLI/认证尚未配置，因此跨厂商协作未验证。Eve 的模型授权也与 Codex CLI 分开；类型检查和构建不能证明 Eve 对话已可用。
 

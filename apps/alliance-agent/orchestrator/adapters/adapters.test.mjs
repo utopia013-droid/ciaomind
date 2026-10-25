@@ -6,6 +6,7 @@ import {
   readFileSync,
   existsSync,
   mkdirSync,
+  linkSync,
   rmSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -240,6 +241,170 @@ test("Codex rejects API-key mode by default and refuses unreviewed project confi
     ).run(p),
     { code: "CONFIG_REVIEW_REQUIRED" },
   );
+});
+
+test("Codex does not mistake its ignored global config for an ancestor project config", async (t) => {
+  const directory = temp(t);
+  const profile = join(directory, "profile");
+  const globalDirectory = join(profile, ".codex");
+  const workdir = join(profile, "AppData", "Local", "Temp", "probe");
+  mkdirSync(globalDirectory, { recursive: true });
+  mkdirSync(workdir, { recursive: true });
+  const config = "# Synthetic global config, not a project layer\n";
+  writeFileSync(join(globalDirectory, "config.toml"), config);
+  const argsPath = join(directory, "args.json");
+  const worker = createCodexWorker(
+    { id: "codex", enabled: true, binary: fakeCLI(directory), workdir },
+    {
+      env: {
+        ...process.env,
+        CODEX_HOME: globalDirectory,
+        CIAOMIND_ENABLE_WORKERS: "1",
+        TEST_ARGS_FILE: argsPath,
+      },
+    },
+  );
+  const result = await worker.run(
+    packet("codex", {
+      capability: "repo.read",
+      grant: { namespace: "project", capability: "repo.read" },
+    }),
+  );
+  assert.equal(result.producer, "codex");
+  const invocation = JSON.parse(readFileSync(argsPath, "utf8"));
+  assert(invocation.args.includes("--ignore-user-config"));
+  assert.equal(
+    invocation.args[invocation.args.indexOf("--sandbox") + 1],
+    "read-only",
+  );
+  assert.equal(readFileSync(join(globalDirectory, "config.toml"), "utf8"), config);
+});
+
+test("Codex does not exempt the parent home config when a child uses a different home", async (t) => {
+  const directory = temp(t);
+  const parentProfile = join(directory, "parent-profile");
+  const childProfile = join(directory, "child-profile");
+  const workdir = join(parentProfile, "nested", "work");
+  mkdirSync(join(parentProfile, ".codex"), { recursive: true });
+  mkdirSync(childProfile, { recursive: true });
+  mkdirSync(workdir, { recursive: true });
+  writeFileSync(
+    join(parentProfile, ".codex", "config.toml"),
+    "# Synthetic parent default; a project ancestor for the child\n",
+  );
+  const binary = fakeCLI(directory);
+  const argsPath = join(directory, "args.json");
+  const parentEnv = {
+    ...process.env,
+    HOME: parentProfile,
+    USERPROFILE: parentProfile,
+  };
+  delete parentEnv.CODEX_HOME;
+  const p = packet("codex", {
+    capability: "repo.read",
+    grant: { namespace: "project", capability: "repo.read" },
+  });
+  // Only this self-contained Node process gets a synthetic home. Neither this
+  // test runner's environment nor the machine's real home is changed.
+  const driver = `
+    import { homedir } from "node:os";
+    import { createCodexWorker } from ${JSON.stringify(new URL("./codex.mjs", import.meta.url).href)};
+    const env = {
+      ...process.env,
+      HOME: ${JSON.stringify(childProfile)},
+      USERPROFILE: ${JSON.stringify(childProfile)},
+      CIAOMIND_ENABLE_WORKERS: "1",
+      TEST_ARGS_FILE: ${JSON.stringify(argsPath)}
+    };
+    delete env.CODEX_HOME;
+    const worker = createCodexWorker(
+      { id: "codex", enabled: true, binary: ${JSON.stringify(binary)}, workdir: ${JSON.stringify(workdir)} },
+      { env }
+    );
+    let code = null, notStarted = false;
+    try { await worker.run(${JSON.stringify(p)}); }
+    catch (error) { code = error.code; notStarted = error.notStarted; }
+    console.log(JSON.stringify({ parent_home_is_fixture: homedir() === ${JSON.stringify(parentProfile)}, code, notStarted }));
+  `;
+  const result = await runProcess(process.execPath, ["--input-type=module", "-"], {
+    input: driver,
+    env: parentEnv,
+    timeoutMs: 10_000,
+  });
+  assert.equal(result.code, 0);
+  assert.deepEqual(JSON.parse(result.stdout.trim()), {
+    parent_home_is_fixture: true,
+    code: "CONFIG_REVIEW_REQUIRED",
+    notStarted: true,
+  });
+  assert(!existsSync(argsPath));
+});
+
+test("Codex still refuses an ancestor config outside its actual global directory", async (t) => {
+  const directory = temp(t);
+  const globalDirectory = join(directory, "global");
+  const parent = join(directory, "workspace");
+  const workdir = join(parent, "nested", "work");
+  mkdirSync(globalDirectory, { recursive: true });
+  mkdirSync(join(parent, ".codex"), { recursive: true });
+  mkdirSync(workdir, { recursive: true });
+  writeFileSync(join(parent, ".codex", "config.toml"), "# Synthetic project\n");
+  const argsPath = join(directory, "args.json");
+  const worker = createCodexWorker(
+    { id: "codex", enabled: true, binary: fakeCLI(directory), workdir },
+    {
+      env: {
+        ...process.env,
+        CODEX_HOME: globalDirectory,
+        CIAOMIND_ENABLE_WORKERS: "1",
+        TEST_ARGS_FILE: argsPath,
+      },
+    },
+  );
+  await assert.rejects(
+    worker.run(
+      packet("codex", {
+        capability: "repo.read",
+        grant: { namespace: "project", capability: "repo.read" },
+      }),
+    ),
+    { code: "CONFIG_REVIEW_REQUIRED", notStarted: true },
+  );
+  assert(!existsSync(argsPath));
+});
+
+test("a project config file alias does not inherit the ignored global directory exemption", async (t) => {
+  const directory = temp(t);
+  const globalDirectory = join(directory, "global");
+  const workdir = join(directory, "workspace");
+  const projectConfigDirectory = join(workdir, ".codex");
+  mkdirSync(globalDirectory, { recursive: true });
+  mkdirSync(projectConfigDirectory, { recursive: true });
+  const globalConfig = join(globalDirectory, "config.toml");
+  writeFileSync(globalConfig, "# Synthetic shared file, distinct config directory\n");
+  linkSync(globalConfig, join(projectConfigDirectory, "config.toml"));
+  const argsPath = join(directory, "args.json");
+  const worker = createCodexWorker(
+    { id: "codex", enabled: true, binary: fakeCLI(directory), workdir },
+    {
+      env: {
+        ...process.env,
+        CODEX_HOME: globalDirectory,
+        CIAOMIND_ENABLE_WORKERS: "1",
+        TEST_ARGS_FILE: argsPath,
+      },
+    },
+  );
+  await assert.rejects(
+    worker.run(
+      packet("codex", {
+        capability: "repo.read",
+        grant: { namespace: "project", capability: "repo.read" },
+      }),
+    ),
+    { code: "CONFIG_REVIEW_REQUIRED", notStarted: true },
+  );
+  assert(!existsSync(argsPath));
 });
 
 test("Codex rejects incomplete, mismatched and oversized final responses", async (t) => {
